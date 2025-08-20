@@ -13,7 +13,7 @@ class AppTheme {
     brightness: Brightness.light,
     primaryColor: primaryColor,
     fontFamily: 'Roboto',
-    appBarTheme: const AppBarTheme(color: primaryColor),
+    appBarTheme: const AppBarTheme(backgroundColor: primaryColor),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: accentColor,
     ),

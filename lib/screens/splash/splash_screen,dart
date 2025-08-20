@@ -1,107 +1,130 @@
-// lib/screens/splash/splash_screen.dart
 import 'package:flutter/material.dart';
-import 'package:oksanashik/utils/constants.dart';
-import 'package:oksanashik/utils/theme.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
-  late AnimationController _logoController;
-  late Animation<double> _logoScaleAnimation;
-  late Animation<Offset> _textSlideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Анимация масштабирования логотипа
-    _logoController = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    );
-
-    _logoScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _logoController, curve: Curves.elasticOut),
-    );
-
-    _textSlideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _logoController, curve: Curves.decelerate),
-    );
-
-    _logoController.forward();
-
-    // Переход на следующий экран через 2.5 секунды
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/login');
-    });
-  }
-
-  @override
-  void dispose() {
-    _logoController.dispose();
-    super.dispose();
-  }
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryColor,
+      backgroundColor: Colors.red,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Анимированный логотип
-            ScaleTransition(
-              scale: _logoScaleAnimation,
-              child: Container(
-                width: 120,
-                height: 120,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  // Здесь можно поставить изображение, если будет
-                  // image: DecorationImage(image: AssetImage('assets/images/logo.png'))
-                ),
-                child: const Center(
-                  child: Text(
-                    "O",
-                    style: TextStyle(
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.accentColor,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            // Анимированный текст
-            SlideTransition(
-              position: _textSlideAnimation,
-              child: Text(
-                "Оксана Шик",
-                style: AppTheme.heading1.copyWith(fontSize: 32, color: Colors.white),
-              ),
-            ),
-            const SizedBox(height: 10),
-            FadeTransition(
-              opacity: _logoController,
-              child: Text(
-                "Красота начинается здесь",
-                style: AppTheme.bodyText.copyWith(color: Colors.white70),
-              ),
-            ),
-          ],
+        child: Text(
+          'Оксана Шик',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Colors.purple,
+            fontFamily: 'Roboto',
+          ),
         ),
       ),
     );
   }
 }
+// import 'package:flutter/material.dart';
+// import 'package:oksanashik/utils/constants.dart';
+// import 'package:oksanashik/utils/theme.dart';
+
+// class SplashScreen extends StatefulWidget {
+//   const SplashScreen({Key? key}) : super(key: key);
+
+//   @override
+//   State<SplashScreen> createState() => _SplashScreenState();
+
+// }
+
+// class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+//   late AnimationController _logoController;
+//   late Animation<double> _logoScaleAnimation;
+//   late Animation<Offset> _textSlideAnimation;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     // Анимация масштабирования логотипа
+//     _logoController = AnimationController(
+//       duration: const Duration(seconds: 1),
+//       vsync: this,
+//     );
+
+//     _logoScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+//       CurvedAnimation(parent: _logoController, curve: Curves.elasticOut),
+//     );
+
+//     _textSlideAnimation = Tween<Offset>(
+//       begin: const Offset(0, 0.3),
+//       end: Offset.zero,
+//     ).animate(
+//       CurvedAnimation(parent: _logoController, curve: Curves.decelerate),
+//     );
+
+//     _logoController.forward();
+
+//     // Переход на следующий экран через 2.5 секунды
+//     Future.delayed(const Duration(seconds: 2), () {
+//       Navigator.pushReplacementNamed(context, '/login');
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     _logoController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: AppTheme.primaryColor,
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             // Анимированный логотип
+//             ScaleTransition(
+//               scale: _logoScaleAnimation,
+//               child: Container(
+//                 width: 120,
+//                 height: 120,
+//                 decoration: const BoxDecoration(
+//                   shape: BoxShape.circle,
+//                   color: Colors.white,
+//                   // Здесь можно поставить изображение, если будет
+//                   // image: DecorationImage(image: AssetImage('assets/images/logo.png'))
+//                 ),
+//                 child: const Center(
+//                   child: Text(
+//                     "O",
+//                     style: TextStyle(
+//                       fontSize: 60,
+//                       fontWeight: FontWeight.bold,
+//                       color: AppTheme.accentColor,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             const SizedBox(height: 30),
+//             // Анимированный текст
+//             SlideTransition(
+//               position: _textSlideAnimation,
+//               child: Text(
+//                 "Оксана Шик",
+//                 style: AppTheme.heading1.copyWith(fontSize: 32, color: Colors.white),
+//               ),
+//             ),
+//             const SizedBox(height: 10),
+//             FadeTransition(
+//               opacity: _logoController,
+//               child: Text(
+//                 "Красота начинается здесь",
+//                 style: AppTheme.bodyText.copyWith(color: Colors.white70),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
