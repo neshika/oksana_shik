@@ -1,6 +1,7 @@
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/screens/auth/login_screen.dart';
+import 'package:oksana_shik/screens/auth/register_screen.dart';
 import 'package:oksana_shik/screens/booking/booking_screen.dart';
 import 'package:oksana_shik/screens/home/home_screen.dart';
 import 'package:oksana_shik/screens/profile/profile_screen.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
         primarySwatch: Colors.deepPurple, // Можно изменить позже
       ),
-      home: const BookingScreen(),
+      home: const RegisterScreen(),
       debugShowCheckedModeBanner: false, // Убирает баннер "DEBUG"
     );
   }
