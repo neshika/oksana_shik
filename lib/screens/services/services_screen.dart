@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:oksana_shik/screens/services/service_filter.dart';
 
 class ServicesScreen extends StatelessWidget {
-  const ServicesScreen({Key? key}) : super(key: key);
+  const ServicesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

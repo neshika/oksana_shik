@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class ServiceFilter extends StatefulWidget {
-  const ServiceFilter({Key? key}) : super(key: key);
+  const ServiceFilter({super.key});
 
   @override
   State<ServiceFilter> createState() => _ServiceFilterState();

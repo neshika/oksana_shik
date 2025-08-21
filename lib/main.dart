@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
         primarySwatch: Colors.deepPurple, // Можно изменить позже
       ),
-      home: const CalendarWidget(),
+      home: const HomeScreen(),
       debugShowCheckedModeBanner: false, // Убирает баннер "DEBUG"
     );
   }
