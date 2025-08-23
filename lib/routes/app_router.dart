@@ -1,7 +1,9 @@
 // lib/routes/app_router.dart
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/screens/auth/login_screen.dart';
-import 'package:oksana_shik/screens/splash/splash_screen,dart';
+import 'package:oksana_shik/screens/auth/register_screen.dart';
+import 'package:oksana_shik/screens/home/home_screen.dart';
+import 'package:oksana_shik/screens/splash/splash_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -10,6 +12,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case '/login':
         return MaterialPageRoute(builder: (_) => const LoginScreen());
+      case '/register':
+        return MaterialPageRoute(builder: (_) => const RegisterScreen());
+      case '/home':
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
       default:
         return MaterialPageRoute(
           builder: (_) =>

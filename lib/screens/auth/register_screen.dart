@@ -1,5 +1,6 @@
 // lib/screens/auth/register_screen.dart
 import 'package:flutter/material.dart';
+import 'package:oksana_shik/utils/theme.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -8,9 +9,9 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Регистрация'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        title: const Text('Регистрация /register'),
+        backgroundColor: AppTheme.primaryColor,
+        foregroundColor: AppTheme.backgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -70,8 +71,8 @@ class RegisterScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppTheme.primaryColor,
+                  foregroundColor: AppTheme.backgroundColor,
                 ),
                 child: const Text('Зарегистрироваться'),
               ),

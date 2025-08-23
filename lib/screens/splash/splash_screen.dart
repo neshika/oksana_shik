@@ -1,7 +1,7 @@
 // lib/screens/splash/splash_screen.dart
 import 'package:flutter/material.dart';
-import 'package:oksana_shik/utils/constants.dart'; 
-import 'package:oksana_shik/utils/theme.dart'; 
+//import 'package:oksana_shik/utils/constants.dart';
+import 'package:oksana_shik/utils/theme.dart';
 
 // Определите класс StatefulWidget SplashScreen
 class SplashScreen extends StatefulWidget {
@@ -13,7 +13,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 // Определите внутренний класс состояния _SplashScreenState
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   // Объявляем контроллер анимации для логотипа
   late AnimationController _logoController;
   // Объявляем анимацию масштабирования логотипа
@@ -49,9 +50,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     // После 2 секунд переходим на экран входа
     Future.delayed(const Duration(seconds: 2), () {
       // Переход на экран логина с заменой текущего экрана
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed((context), '/login');
     });
-  } 
+  }
 
   /*====================== Метод, который выполняется при уничтожении состояния */
   @override
@@ -140,4 +141,3 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     );
   }
 }
-

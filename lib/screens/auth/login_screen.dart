@@ -1,5 +1,6 @@
 // lib/screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
+import 'package:oksana_shik/utils/theme.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -8,9 +9,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Вход'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        title: const Text('Вход /login'),
+        backgroundColor: AppTheme.primaryColor,
+        foregroundColor: AppTheme.backgroundColor,
+        leading: Container(), //кнопка возврата скрыта
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -24,7 +26,7 @@ class LoginScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             TextField(
               decoration: const InputDecoration(
                 labelText: 'Email',
@@ -32,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                 prefixIcon: Icon(Icons.email),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             TextField(
               obscureText: true,
               decoration: const InputDecoration(
@@ -41,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                 prefixIcon: Icon(Icons.lock),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -51,8 +53,8 @@ class LoginScreen extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, '/home');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppTheme.primaryColor,
+                  foregroundColor: AppTheme.backgroundColor,
                 ),
                 child: const Text('Войти'),
               ),
@@ -61,8 +63,10 @@ class LoginScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 // Переход на регистрацию
-                // Navigator.pushNamed(context, '/register');
+                Navigator.pushNamed(context, '/register');
               },
+              style:
+                  TextButton.styleFrom(foregroundColor: AppTheme.primaryColor),
               child: const Text('Зарегистрироваться'),
             ),
           ],
