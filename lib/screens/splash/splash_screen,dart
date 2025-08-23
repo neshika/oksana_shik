@@ -1,7 +1,7 @@
 // lib/screens/splash/splash_screen.dart
 import 'package:flutter/material.dart';
-import 'package:oksana_shik/utils/constants.dart'; // Убедитесь, что путь правильный
-import 'package:oksana_shik/utils/theme.dart'; // Убедитесь, что путь правильный
+import 'package:oksana_shik/utils/constants.dart'; 
+import 'package:oksana_shik/utils/theme.dart'; 
 
 // Определите класс StatefulWidget SplashScreen
 class SplashScreen extends StatefulWidget {

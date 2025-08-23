@@ -1,18 +1,7 @@
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-// import 'package:oksana_shik/screens/auth/login_screen.dart';
-// import 'package:oksana_shik/screens/auth/register_screen.dart';
-// import 'package:oksana_shik/screens/booking/booking_screen.dart';
-// import 'package:oksana_shik/screens/auth/login_screen.dart';
-// import 'package:oksana_shik/screens/auth/register_screen.dart';
-// import 'package:oksana_shik/screens/booking/booking_screen.dart';
-// import 'package:oksana_shik/screens/booking/calendar_widget.dart';
-// import 'package:oksana_shik/screens/home/home_screen.dart';
-// import 'package:oksana_shik/screens/profile/profile_screen.dart';
-import 'package:oksana_shik/screens/splash/splash_screen,dart';
-// import 'package:oksana_shik/screens/profile/profile_screen.dart';
-// import 'package:oksana_shik/screens/services/services_screen.dart';
-// import 'package:oksana_shik/screens/splash/splash_screen,dart';
+import 'package:oksana_shik/routes/app_router.dart';
+import 'package:oksana_shik/utils/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,11 +19,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Оксана Шик',
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        primarySwatch: Colors.deepPurple, // Можно изменить позже
-      ),
-      home: const SplashScreen(),
+      theme: AppTheme.light,
+      // home: const SplashScreen(),
+      initialRoute: '/splash',
+      onGenerateRoute: AppRouter.generateRoute,
       debugShowCheckedModeBanner: false, // Убирает баннер "DEBUG"
     );
   }
