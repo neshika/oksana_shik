@@ -1,5 +1,6 @@
 // lib/screens/booking/booking_screen.dart
 import 'package:flutter/material.dart';
+import 'package:oksana_shik/utils/theme.dart';
 
 class BookingScreen extends StatelessWidget {
   const BookingScreen({super.key});
@@ -49,9 +50,9 @@ class BookingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Запись на услугу'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        title: const Text('Запись на услугу /booking'),
+        backgroundColor: AppTheme.primaryColor,
+        foregroundColor: AppTheme.backgroundColor,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -110,7 +111,7 @@ class BookingScreen extends StatelessWidget {
                               '${service['price']} руб.',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.purple,
+                                color: AppTheme.primaryColor,
                               ),
                             ),
                           ],
@@ -255,8 +256,8 @@ class BookingScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppTheme.primaryColor,
+                  foregroundColor: AppTheme.backgroundColor,
                 ),
                 child: const Text('Подтвердить запись'),
               ),

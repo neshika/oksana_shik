@@ -44,6 +44,7 @@ class HomeScreen extends StatelessWidget {
               title: Text('Записаться'),
               onTap: () {
                 // Навигация на экран записи
+                Navigator.pushNamed(context, '/booking');
               },
             ),
             ListTile(
@@ -58,6 +59,7 @@ class HomeScreen extends StatelessWidget {
               title: Text('Профиль'),
               onTap: () {
                 // Навигация на профиль
+                Navigator.pushNamed(context, '/profile');
               },
             ),
           ],

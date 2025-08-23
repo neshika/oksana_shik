@@ -1,5 +1,6 @@
 // lib/screens/profile/profile_screen.dart
 import 'package:flutter/material.dart';
+import 'package:oksana_shik/utils/theme.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -41,9 +42,13 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Профиль'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        title: const Text('Профиль /profile'),
+        backgroundColor: AppTheme.primaryColor,
+        foregroundColor: AppTheme.backgroundColor,
+        leading: IconButton(
+          onPressed: () => Navigator.pushNamed(context, '/home'),
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -60,11 +65,11 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     const CircleAvatar(
                       radius: 50,
-                      backgroundColor: Colors.purple,
+                      backgroundColor: AppTheme.primaryColor,
                       child: Icon(
                         Icons.person,
                         size: 60,
-                        color: Colors.white,
+                        color: AppTheme.backgroundColor,
                       ),
                     ),
                     const SizedBox(height: 15),
