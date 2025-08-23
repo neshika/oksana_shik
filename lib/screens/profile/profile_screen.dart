@@ -125,8 +125,8 @@ class ProfileScreen extends StatelessWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         color: appointment['status'] == 'completed'
-                            ? Colors.green.withOpacity(0.2)
-                            : Colors.purple.withOpacity(0.2),
+                            ? Colors.green.withValues(alpha: 76.0)
+                            : Colors.purple.withValues(alpha: 76.0),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Center(

@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 // import 'package:oksana_shik/screens/auth/login_screen.dart';
 // import 'package:oksana_shik/screens/auth/register_screen.dart';
 // import 'package:oksana_shik/screens/booking/booking_screen.dart';
+// import 'package:oksana_shik/screens/auth/login_screen.dart';
+// import 'package:oksana_shik/screens/auth/register_screen.dart';
+// import 'package:oksana_shik/screens/booking/booking_screen.dart';
 // import 'package:oksana_shik/screens/booking/calendar_widget.dart';
-import 'package:oksana_shik/screens/home/home_screen.dart';
+// import 'package:oksana_shik/screens/home/home_screen.dart';
+// import 'package:oksana_shik/screens/profile/profile_screen.dart';
+import 'package:oksana_shik/screens/splash/splash_screen,dart';
 // import 'package:oksana_shik/screens/profile/profile_screen.dart';
 // import 'package:oksana_shik/screens/services/services_screen.dart';
 // import 'package:oksana_shik/screens/splash/splash_screen,dart';
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
         primarySwatch: Colors.deepPurple, // Можно изменить позже
       ),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false, // Убирает баннер "DEBUG"
     );
   }
