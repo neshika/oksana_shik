@@ -1,9 +1,70 @@
 // lib/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:oksana_shik/services/firestore_service.dart'; // Добавляем импорт сервиса Firestore
+import 'package:oksana_shik/models/user_model.dart'
+    as user_model; // Добавляем импорт модели пользователя
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // Переменная для хранения имени пользователя
+  String _userName = 'Гость';
+  bool _isLoading = true; // Для отображения загрузки
+
+  // Функция для получения данных пользователя из Firestore
+  Future<void> _loadUserData() async {
+    try {
+      // Получаем текущего пользователя из Firebase Auth
+      firebase_auth.User? currentUser =
+          firebase_auth.FirebaseAuth.instance.currentUser;
+
+      if (currentUser != null) {
+        // Получаем UID пользователя
+        String uid = currentUser.uid;
+
+        // Получаем данные пользователя из Firestore
+        user_model.User? user = await FirestoreService.getUserById(uid);
+
+        if (user != null) {
+          // Устанавливаем имя пользователя из базы данных
+          setState(() {
+            _userName = user.fullName;
+            _isLoading = false;
+          });
+        } else {
+          // Если пользователя нет в базе данных, используем email
+          setState(() {
+            _userName = currentUser.email ?? 'Пользователь';
+            _isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      // В случае ошибки показываем стандартное имя
+      setState(() {
+        _userName = 'Пользователь';
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Загружаем данные пользователя при инициализации экрана
+    _loadUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +84,20 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Добро пожаловать!',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            // Отображаем загрузку пока данные не загрузились
+            if (_isLoading)
+              Center(
+                child:
+                    CircularProgressIndicator(), // Показываем индикатор загрузки
+              )
+            else
+              Text(
+                'Добро пожаловать, $_userName!', // Используем имя из базы данных
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
             SizedBox(height: 20),
             Text(
               'Выберите действие:',
