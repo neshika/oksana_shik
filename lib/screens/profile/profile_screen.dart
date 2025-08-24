@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
 import 'package:oksana_shik/services/firestore_service.dart';
-import 'package:oksana_shik/models/user_model.dart' as UserModel;
+import 'package:oksana_shik/models/user_model.dart' as user_model;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String _editedPhoneNumber;
 
   // Переменная для хранения оригинальных данных пользователя
-  UserModel.User? _userData;
+  user_model.User? _userData;
 
   // Контроллеры для текстовых полей (решают проблему с клавиатурой)
   late TextEditingController _fullNameController;
@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             final firebaseUser = userSnapshot.data!;
 
             // Используем StreamBuilder для получения данных пользователя
-            return StreamBuilder<UserModel.User?>(
+            return StreamBuilder<user_model.User?>(
               stream: FirestoreService.getUserStreamById(firebaseUser.uid),
               builder: (context, userDetailSnapshot) {
                 if (userDetailSnapshot.connectionState ==
