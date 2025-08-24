@@ -1,5 +1,6 @@
 // lib/screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
+import 'package:oksana_shik/screens/auth/test_screen.dart';
 import 'package:oksana_shik/utils/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -133,6 +134,27 @@ class LoginScreen extends StatelessWidget {
               style:
                   TextButton.styleFrom(foregroundColor: AppTheme.primaryColor),
               child: const Text('Зарегистрироваться'),
+            ),
+            // Новая кнопка для перехода на экран Test
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Переход на экран Test
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TestScreen()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.green, // Зеленый цвет для тестовой кнопки
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Перейти к тесту базы данных'),
+              ),
             ),
           ],
         ),
