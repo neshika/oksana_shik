@@ -67,54 +67,92 @@ class BookingScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            // Отступ вертикальный высотой 15 пикселей между элементами
             const SizedBox(height: 15),
-            Container(
+
+// Контейнер высотой 200 пикселей для отображения горизонтального списка услуг
+            SizedBox(
               height: 200,
               child: ListView.builder(
+                // Установка горизонтальной прокрутки списка
                 scrollDirection: Axis.horizontal,
+
+                // Количество элементов в списке (равно количеству услуг)
                 itemCount: services.length,
+
+                // Функция для создания каждого элемента списка услуг
                 itemBuilder: (context, index) {
+                  // Получаем текущую услугу по индексу из списка services
                   final service = services[index];
+
+                  // Создаем карточку для отображения информации об услуге
                   return Card(
+                    // Отступ справа между карточками для визуального разделения
                     margin: const EdgeInsets.only(right: 15),
+
+                    // Обертка для обработки нажатия на карточку
                     child: InkWell(
+                      // Обработка события нажатия на услугу
                       onTap: () {
-                        // Обработка выбора услуги
+                        // Отображение всплывающего уведомления о выборе услуги
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                              content:
-                                  Text('Выбрана услуга: ${service['title']}')),
+                            // Текст уведомления с названием выбранной услуги
+                            content:
+                                Text('Выбрана услуга: ${service['title']}'),
+                          ),
                         );
                       },
-                      child: Container(
-                        width: 150,
+
+                      // Внутренний контент карточки с отступами
+                      child: Padding(
+                        // Внутренние отступы вокруг содержимого карточки
                         padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              service['title'] as String,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+
+                        // Контейнер фиксированной ширины для ограничения размера карточки
+                        child: SizedBox(
+                          width: 150, // Ширина карточки 150 пикселей
+
+                          // Вертикальная колонка с элементами услуги
+                          child: Column(
+                            // Выравнивание элементов по левому краю
+                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                            // Дочерние элементы колонки
+                            children: [
+                              // Название услуги с жирным шрифтом
+                              Text(
+                                service['title'] as String,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              service['description'] as String,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
+
+                              // Отступ вертикальный высотой 5 пикселей между заголовком и описанием
+                              const SizedBox(height: 5),
+
+                              // Описание услуги с маленьким размером шрифта и серым цветом
+                              Text(
+                                service['description'] as String,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              '${service['price']} руб.',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.primaryColor,
+
+                              // Отступ вертикальный высотой 10 пикселей между описанием и ценой
+                              const SizedBox(height: 10),
+
+                              // Цена услуги с жирным шрифтом и основным цветом темы
+                              Text(
+                                '${service['price']} руб.',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.primaryColor,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -134,7 +172,7 @@ class BookingScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            Container(
+            SizedBox(
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -199,7 +237,7 @@ class BookingScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            Container(
+            SizedBox(
               height: 150,
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
