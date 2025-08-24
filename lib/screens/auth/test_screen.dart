@@ -16,10 +16,59 @@ class TestScreen extends StatelessWidget {
         fullName: 'Тестовый Пользователь',
         phoneNumber: '+71234567890',
       );
-
       // Показываем сообщение об успешном создании
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Коллекция users создана!')),
+      );
+    } catch (e) {
+      // Показываем сообщение об ошибке
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка: $e')),
+      );
+    }
+  }
+
+  // Функция для создания коллекции categories
+  void createCategoriesCollection(BuildContext context) async {
+    try {
+      // Создаем тестовую категорию
+      await FirestoreService.createCategory(
+        categoryId: 'female_001',
+        name: {'ru': 'Женская', 'en': 'Female'},
+        order: 1,
+        isActive: true,
+      );
+      // Показываем сообщение об успешном создании
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Коллекция categories создана!')),
+      );
+    } catch (e) {
+      // Показываем сообщение об ошибке
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка: $e')),
+      );
+    }
+  }
+
+  // Функция для создания коллекции services
+  void createServicesCollection(BuildContext context) async {
+    try {
+      // Создаем тестовый сервис
+      await FirestoreService.createService(
+        serviceId: 'svc_test_001',
+        title: {'ru': 'Стрижка', 'en': 'haircut'},
+        description: {
+          'ru': 'Стрижка женская короткий волос',
+          'en': 'Women\'s haircut short hair'
+        },
+        price: 1000,
+        duration: 60,
+        category: 'female_001', // Ссылка на созданную категорию
+        isActive: true,
+      );
+      // Показываем сообщение об успешном создании
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Коллекция services создана!')),
       );
     } catch (e) {
       // Показываем сообщение об ошибке
@@ -56,7 +105,6 @@ class TestScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 30),
-
             // Кнопка для создания коллекции users
             SizedBox(
               width: double.infinity,
@@ -70,9 +118,35 @@ class TestScreen extends StatelessWidget {
                 child: const Text('Создать коллекцию users'),
               ),
             ),
-
             const SizedBox(height: 20),
-
+            // Кнопка для создания коллекции categories
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () => createCategoriesCollection(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Зеленый цвет
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Создать коллекцию categories'),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Кнопка для создания коллекции services
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () => createServicesCollection(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange, // Оранжевый цвет
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Создать коллекцию services'),
+              ),
+            ),
+            const SizedBox(height: 20),
             // Кнопка для перехода обратно
             SizedBox(
               width: double.infinity,
