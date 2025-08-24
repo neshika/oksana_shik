@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:oksana_shik/models/user_model.dart';
+import 'package:oksana_shik/models/user_model.dart' as UserModel;
 import 'package:oksana_shik/models/service_model.dart';
 import 'package:oksana_shik/models/category_model.dart';
 
@@ -29,18 +29,28 @@ class FirestoreService {
   }
 
   // Получение пользователя по UID
-  static Future<User?> getUserById(String uid) async {
+  static Future<UserModel.User?> getUserById(String uid) async {
     try {
       DocumentSnapshot doc =
           await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
-        return User.fromMap(doc.data() as Map<String, dynamic>, uid);
+        return UserModel.User.fromMap(doc.data() as Map<String, dynamic>, uid);
       }
       return null;
     } catch (e) {
       print('Ошибка при получении пользователя: $e');
       return null;
     }
+  }
+
+  // Получение потока данных пользователя по UID
+  static Stream<UserModel.User?> getUserStreamById(String uid) {
+    return _firestore.collection('users').doc(uid).snapshots().map((doc) {
+      if (doc.exists) {
+        return UserModel.User.fromMap(doc.data() as Map<String, dynamic>, uid);
+      }
+      return null;
+    });
   }
 
   // Создание категории
