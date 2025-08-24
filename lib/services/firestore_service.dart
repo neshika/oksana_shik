@@ -6,6 +6,7 @@ import 'package:oksana_shik/models/category_model.dart';
 class FirestoreService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  /************************************** Пользователь*/
   // Создание нового пользователя
   static Future<void> createUser({
     required String uid,
@@ -53,6 +54,25 @@ class FirestoreService {
     });
   }
 
+  static Future<void> updateUser({
+    required String uid,
+    required String fullName,
+    required String phoneNumber,
+  }) async {
+    try {
+      await _firestore.collection('users').doc(uid).update({
+        'fullName': fullName,
+        'phoneNumber': phoneNumber,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      print('Профиль успешно обновлен!');
+    } catch (e) {
+      print('Ошибка при обновлении профиля: $e');
+      rethrow;
+    }
+  }
+
+/************************************** Категория*/
   // Создание категории
   static Future<void> createCategory({
     required String categoryId,
@@ -100,6 +120,12 @@ class FirestoreService {
     }
   }
 
+  // Получение всех категорий (для админки или отладки)
+  static Stream<QuerySnapshot> getAllCategories() {
+    return _firestore.collection('categories').snapshots();
+  }
+
+/************************************** Услуга*/
   // Создание услуги
   static Future<void> createService({
     required String serviceId,
@@ -161,11 +187,6 @@ class FirestoreService {
       print('Ошибка при получении услуги: $e');
       return null;
     }
-  }
-
-  // Получение всех категорий (для админки или отладки)
-  static Stream<QuerySnapshot> getAllCategories() {
-    return _firestore.collection('categories').snapshots();
   }
 
   // Получение всех услуг (для админки или отладки)
