@@ -158,14 +158,14 @@ class RegisterScreen extends StatelessWidget {
               // Заголовок формы регистрации
               Center(
                 child: Text(
-                  'Регистрация в приложении',
+                  'Регистрация',
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
               TextField(
                 controller: nameController, //контроллер
                 decoration: const InputDecoration(
@@ -174,7 +174,7 @@ class RegisterScreen extends StatelessWidget {
                   prefixIcon: Icon(Icons.person), //иконка
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextField(
                 controller: emailController, //контроллер
                 decoration: const InputDecoration(
@@ -183,7 +183,7 @@ class RegisterScreen extends StatelessWidget {
                   prefixIcon: Icon(Icons.email),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextField(
                 controller: passwordController,
                 obscureText: true,
@@ -193,7 +193,7 @@ class RegisterScreen extends StatelessWidget {
                   prefixIcon: Icon(Icons.lock),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextField(
                 controller: confirmPasswordController,
                 obscureText: true,
@@ -204,7 +204,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               //кнопка регистрации
               SizedBox(

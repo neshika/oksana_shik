@@ -59,84 +59,88 @@ class LoginScreen extends StatelessWidget {
         foregroundColor: AppTheme.backgroundColor,
         leading: Container(), //кнопка возврата скрыта
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Вход в приложение',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Пароль',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                // onPressed: handleLogin,
-                onPressed: signIn,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
-                  foregroundColor: AppTheme.backgroundColor,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20), // Отступ сверху
+              // Заголовок формы регистрации
+              const Text(
+                'Вход в приложение',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: const Text('Войти'),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                // Переход на регистрацию
-                Navigator.pushNamed(context, '/register');
-              },
-              style:
-                  TextButton.styleFrom(foregroundColor: AppTheme.primaryColor),
-              child: const Text('Зарегистрироваться'),
-            ),
-            // Новая кнопка для перехода на экран Test
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
+              const SizedBox(height: 10),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.email),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Пароль',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  // onPressed: handleLogin,
+                  onPressed: signIn,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: AppTheme.backgroundColor,
+                  ),
+                  child: const Text('Войти'),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextButton(
                 onPressed: () {
-                  // Переход на экран Test
-                  // Navigator.push(
-                  // context,
-                  // MaterialPageRoute(builder: (context) => const TestScreen()),
-                  //);
-                  Navigator.pushNamed(context, '/test');
+                  // Переход на регистрацию
+                  Navigator.pushNamed(context, '/register');
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Colors.green, // Зеленый цвет для тестовой кнопки
-                  foregroundColor: Colors.white,
-                ),
-                child: const Text('Перейти к тесту базы данных'),
+                style: TextButton.styleFrom(
+                    foregroundColor: AppTheme.primaryColor),
+                child: const Text('Зарегистрироваться'),
               ),
-            ),
-          ],
+              // Новая кнопка для перехода на экран Test
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Переход на экран Test
+                    // Navigator.push(
+                    // context,
+                    // MaterialPageRoute(builder: (context) => const TestScreen()),
+                    //);
+                    Navigator.pushNamed(context, '/test');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Colors.green, // Зеленый цвет для тестовой кнопки
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Перейти к тесту базы данных'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
