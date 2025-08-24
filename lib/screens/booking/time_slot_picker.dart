@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class TimeSlotPicker extends StatelessWidget {
-  const TimeSlotPicker({Key? key}) : super(key: key);
+  const TimeSlotPicker({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class TimeSlotPicker extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 15),
-          Container(
+          SizedBox(
             height: 200,
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

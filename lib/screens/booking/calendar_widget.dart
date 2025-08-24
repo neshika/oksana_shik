@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class CalendarWidget extends StatelessWidget {
-  const CalendarWidget({Key? key});
+  const CalendarWidget({super.key, Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class CalendarWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 15),
-          Container(
+          SizedBox(
             height: 120,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,

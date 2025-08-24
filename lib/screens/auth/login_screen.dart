@@ -7,6 +7,28 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    // Фейковые данные пользователей для тестирования
+    void handleLogin() {
+      // Проверяем фейковые данные
+      if (emailController.text == 'admin' &&
+          passwordController.text == 'admin') {
+        // Успешный вход
+        Navigator.pushReplacementNamed(context, '/home');
+      } else if (emailController.text == 'user@example.com' &&
+          passwordController.text == 'user123') {
+        // Успешный вход для другого пользователя
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        // Ошибка входа
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Неверный email или пароль')),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Вход /login'),
@@ -28,6 +50,7 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
@@ -36,6 +59,7 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: passwordController,
               obscureText: true,
               decoration: const InputDecoration(
                 labelText: 'Пароль',
@@ -48,10 +72,7 @@ class LoginScreen extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  // Перейти на главный экран
-                  Navigator.pushReplacementNamed(context, '/home');
-                },
+                onPressed: handleLogin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
                   foregroundColor: AppTheme.backgroundColor,

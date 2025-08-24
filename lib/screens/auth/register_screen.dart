@@ -7,11 +7,59 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController confirmPasswordController =
+        TextEditingController();
+
+    void handleRegister() {
+      // Проверяем, что все поля заполнены
+      if (nameController.text.isEmpty ||
+          emailController.text.isEmpty ||
+          passwordController.text.isEmpty ||
+          confirmPasswordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Заполните все поля')),
+        );
+        return;
+      }
+
+      // Проверяем совпадение паролей
+      if (passwordController.text != confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Пароли не совпадают')),
+        );
+        return;
+      }
+
+      // Проверяем длину пароля
+      if (passwordController.text.length < 6) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Пароль должен быть не менее 6 символов')),
+        );
+        return;
+      }
+
+      // Успешная регистрация (фейковая)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Регистрация успешна!')),
+      );
+
+      // Возвращаемся на экран входа
+      Navigator.pop(context);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Регистрация /register'),
         backgroundColor: AppTheme.primaryColor,
         foregroundColor: AppTheme.backgroundColor,
+        leading: IconButton(
+          onPressed: () => Navigator.pushNamed(context, '/login'),
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -64,16 +112,20 @@ class RegisterScreen extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  // Обработка регистрации
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Регистрация успешна!')),
-                  );
-                },
+                onPressed: handleRegister,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
-                  foregroundColor: AppTheme.backgroundColor,
-                ),
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: AppTheme.backgroundColor),
+                //),
+                //   // Обработка регистрации
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(content: Text('Регистрация успешна!')),
+                //   );
+                // },
+                // style: ElevatedButton.styleFrom(
+                //   backgroundColor: AppTheme.primaryColor,
+                //   foregroundColor: AppTheme.backgroundColor,
+                // ),
                 child: const Text('Зарегистрироваться'),
               ),
             ),

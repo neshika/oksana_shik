@@ -37,10 +37,12 @@ dependencies:
   share_plus: ^11.0.0
   cupertino_icons: ^1.0.8
   firebase_core: ^4.0.0
+ 
 
   flutter_localizations:
-    sdk: flutter
+   sdk: flutter
   table_calendar: ^3.1.3
+  firebase_auth: ^6.0.1
   
 
 dev_dependencies:
