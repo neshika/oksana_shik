@@ -12,26 +12,6 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    /*
-    // Фейковые данные пользователей для тестирования
-    void handleLogin() {
-      // Проверяем фейковые данные
-      if (emailController.text == 'admin@mail.ru' &&
-          passwordController.text == 'admin') {
-        // Успешный вход
-        Navigator.pushReplacementNamed(context, '/home');
-      } else if (emailController.text == 'user@example.com' &&
-          passwordController.text == 'user123') {
-        // Успешный вход для другого пользователя
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        // Ошибка входа
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Неверный email или пароль')),
-        );
-      }
-    }
-    */
     Future<void> signIn() async {
       try {
         // Проверяем, что поля не пустые
@@ -143,10 +123,11 @@ class LoginScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Переход на экран Test
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const TestScreen()),
-                  );
+                  // Navigator.push(
+                  // context,
+                  // MaterialPageRoute(builder: (context) => const TestScreen()),
+                  //);
+                  Navigator.pushNamed(context, '/test');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:

@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:oksana_shik/models/user_model.dart'; // Импортируем модель пользователя
+import 'package:oksana_shik/services/firestore_service.dart'; // Импортируем сервис Firestore
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -82,19 +84,32 @@ class RegisterScreen extends StatelessWidget {
           return;
         }
 
-        // Регистрируем нового пользователя
+        // 1.Регистрируем нового пользователя в Firebase Auth
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
 
-        // Успешная регистрация
+        // 2. Получаем UID пользователя из Firebase Auth
+        String uid = userCredential.user!.uid;
+
+        // 3. Создаем запись пользователя в Firestore
+        // Вызываем метод из сервиса, который создаст документ в коллекции 'users'
+        await FirestoreService.createUser(
+          uid: uid, // UID пользователя из Firebase Auth
+          email: emailController.text, // Email из формы регистрации
+          fullName: nameController.text, // Полное имя из формы регистрации
+          phoneNumber:
+              '', // Пустая строка, так как телефон не обязателен для регистрации
+        );
+
+        // 4. Показываем уведомление об успешной регистрации
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Регистрация успешна!')),
         );
 
-        // Возвращаемся на экран входа
+        // 5. Возвращаемся на экран входа
         Navigator.pop(context);
       } on FirebaseAuthException catch (e) {
         String errorMessage = '';
@@ -107,7 +122,6 @@ class RegisterScreen extends StatelessWidget {
         } else {
           errorMessage = 'Ошибка регистрации: ${e.message}';
         }
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
         );

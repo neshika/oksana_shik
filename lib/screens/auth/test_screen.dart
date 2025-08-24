@@ -11,7 +11,7 @@ class TestScreen extends StatelessWidget {
     try {
       // Создаем тестового пользователя (для демонстрации)
       await FirestoreService.createUser(
-        uid: 'test_user_123', // Уникальный ID пользователя
+        uid: 'test_user', // Уникальный ID пользователя
         email: 'test@example.com',
         fullName: 'Тестовый Пользователь',
         phoneNumber: '+71234567890',
