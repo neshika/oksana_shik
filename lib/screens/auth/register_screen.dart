@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:oksana_shik/models/user_model.dart'; // Импортируем модель пользователя
 import 'package:oksana_shik/services/firestore_service.dart'; // Импортируем сервис Firestore
 
 class RegisterScreen extends StatelessWidget {
