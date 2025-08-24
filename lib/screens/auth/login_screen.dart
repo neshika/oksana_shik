@@ -1,6 +1,7 @@
 // lib/screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -10,10 +11,11 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
+    /*
     // Фейковые данные пользователей для тестирования
     void handleLogin() {
       // Проверяем фейковые данные
-      if (emailController.text == 'admin' &&
+      if (emailController.text == 'admin@mail.ru' &&
           passwordController.text == 'admin') {
         // Успешный вход
         Navigator.pushReplacementNamed(context, '/home');
@@ -25,6 +27,47 @@ class LoginScreen extends StatelessWidget {
         // Ошибка входа
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Неверный email или пароль')),
+        );
+      }
+    }
+    */
+    Future<void> signIn() async {
+      try {
+        // Проверяем, что поля не пустые
+        if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Заполните все поля')),
+          );
+          return;
+        }
+
+        // Пытаемся войти через Firebase Auth
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        // Успешный вход
+        Navigator.pushReplacementNamed(context, '/home');
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = '';
+        if (e.code == 'invalid-email') {
+          errorMessage = 'Неверный формат email';
+        } else if (e.code == 'user-not-found') {
+          errorMessage = 'Пользователь не найден';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Неверный пароль';
+        } else {
+          errorMessage = 'Ошибка входа: ${e.message}';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Произошла ошибка: $e')),
         );
       }
     }
@@ -72,7 +115,8 @@ class LoginScreen extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: handleLogin,
+                // onPressed: handleLogin,
+                onPressed: signIn,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
                   foregroundColor: AppTheme.backgroundColor,

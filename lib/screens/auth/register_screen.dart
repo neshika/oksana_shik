@@ -1,6 +1,7 @@
 // lib/screens/auth/register_screen.dart
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -13,42 +14,108 @@ class RegisterScreen extends StatelessWidget {
     final TextEditingController confirmPasswordController =
         TextEditingController();
 
-    void handleRegister() {
-      // Проверяем, что все поля заполнены
-      if (nameController.text.isEmpty ||
-          emailController.text.isEmpty ||
-          passwordController.text.isEmpty ||
-          confirmPasswordController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Заполните все поля')),
+    // void handleRegister() {
+    //   // Проверяем, что все поля заполнены
+    //   if (nameController.text.isEmpty ||
+    //       emailController.text.isEmpty ||
+    //       passwordController.text.isEmpty ||
+    //       confirmPasswordController.text.isEmpty) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(content: Text('Заполните все поля')),
+    //     );
+    //     return;
+    //   }
+
+    //   // Проверяем совпадение паролей
+    //   if (passwordController.text != confirmPasswordController.text) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(content: Text('Пароли не совпадают')),
+    //     );
+    //     return;
+    //   }
+
+    //   // Проверяем длину пароля
+    //   if (passwordController.text.length < 6) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(
+    //           content: Text('Пароль должен быть не менее 6 символов')),
+    //     );
+    //     return;
+    //   }
+
+    //   // Успешная регистрация (фейковая)
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Регистрация успешна!')),
+    //   );
+
+    //   // Возвращаемся на экран входа
+    //   Navigator.pop(context);
+    // }
+
+    Future<void> signUp() async {
+      try {
+        // Проверяем, что все поля заполнены
+        if (nameController.text.isEmpty ||
+            emailController.text.isEmpty ||
+            passwordController.text.isEmpty ||
+            confirmPasswordController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Заполните все поля')),
+          );
+          return;
+        }
+
+        // Проверяем совпадение паролей
+        if (passwordController.text != confirmPasswordController.text) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Пароли не совпадают')),
+          );
+          return;
+        }
+
+        // Проверяем длину пароля
+        if (passwordController.text.length < 6) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Пароль должен быть не менее 6 символов')),
+          );
+          return;
+        }
+
+        // Регистрируем нового пользователя
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
         );
-        return;
-      }
 
-      // Проверяем совпадение паролей
-      if (passwordController.text != confirmPasswordController.text) {
+        // Успешная регистрация
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Пароли не совпадают')),
+          const SnackBar(content: Text('Регистрация успешна!')),
         );
-        return;
-      }
 
-      // Проверяем длину пароля
-      if (passwordController.text.length < 6) {
+        // Возвращаемся на экран входа
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = '';
+        if (e.code == 'email-already-in-use') {
+          errorMessage = 'Email уже используется';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'Неверный формат email';
+        } else if (e.code == 'weak-password') {
+          errorMessage = 'Пароль слишком слабый';
+        } else {
+          errorMessage = 'Ошибка регистрации: ${e.message}';
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Пароль должен быть не менее 6 символов')),
+          SnackBar(content: Text(errorMessage)),
         );
-        return;
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Произошла ошибка: $e')),
+        );
       }
-
-      // Успешная регистрация (фейковая)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Регистрация успешна!')),
-      );
-
-      // Возвращаемся на экран входа
-      Navigator.pop(context);
     }
 
     return Scaffold(
@@ -61,83 +128,92 @@ class RegisterScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Регистрация в приложении',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+
+      // Основное содержимое экрана с прокруткой
+      body: SingleChildScrollView(
+        // Отступы вокруг содержимого
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            // Выравнивание по центру вертикально
+            mainAxisAlignment: MainAxisAlignment.center,
+            // Выравнивание по центру горизонтально
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20), // Отступ сверху
+              // Заголовок формы регистрации
+              Center(
+                child: Text(
+                  'Регистрация в приложении',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Полное имя',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person),
+              const SizedBox(height: 30),
+              TextField(
+                controller: nameController, //контроллер
+                decoration: const InputDecoration(
+                  labelText: 'Полное имя',
+                  border: OutlineInputBorder(), //рамка
+                  prefixIcon: Icon(Icons.person), //иконка
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
+              const SizedBox(height: 20),
+              TextField(
+                controller: emailController, //контроллер
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.email),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Пароль',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
+              const SizedBox(height: 20),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Пароль',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Подтвердите пароль',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
+              const SizedBox(height: 20),
+              TextField(
+                controller: confirmPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Подтвердите пароль',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock),
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: handleRegister,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
-                    foregroundColor: AppTheme.backgroundColor),
-                //),
-                //   // Обработка регистрации
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     const SnackBar(content: Text('Регистрация успешна!')),
-                //   );
-                // },
-                // style: ElevatedButton.styleFrom(
-                //   backgroundColor: AppTheme.primaryColor,
-                //   foregroundColor: AppTheme.backgroundColor,
-                // ),
-                child: const Text('Зарегистрироваться'),
+
+              const SizedBox(height: 30),
+
+              //кнопка регистрации
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: signUp,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primaryColor,
+                      foregroundColor: AppTheme.backgroundColor),
+                  child: const Text('Зарегистрироваться'),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                // Переход на экран входа
-                Navigator.pop(context);
-              },
-              child: const Text('Уже есть аккаунт? Войти'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () {
+                  // Переход на экран входа
+                  Navigator.pop(context);
+                },
+                child: const Text('Уже есть аккаунт? Войти'),
+              ),
+            ],
+          ),
         ),
       ),
     );
