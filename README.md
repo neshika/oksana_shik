@@ -91,9 +91,12 @@
     ru: string,
     en: string
   },
-  price: number,
+  price: number,        // double
   duration: number,     // в минутах
-  category: string      // для фильтрации
+  category: string,      // для фильтрации
+  isActive: bool,
+  createdAt: timestamp,
+  updatedAt: timestamp
 }
 ```
 
@@ -112,7 +115,8 @@
   startTime: timestamp,
   endTime: timestamp,
   status: string,       // 'confirmed', 'completed', 'cancelled'
-  createdAt: timestamp
+  createdAt: timestamp,
+  updatedAt: timestamp
 }
 ```
 
