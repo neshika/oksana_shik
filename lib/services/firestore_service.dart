@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:oksana_shik/models/schedule_model.dart';
 import 'package:oksana_shik/models/user_model.dart' as user_model;
 import 'package:oksana_shik/models/service_model.dart';
 import 'package:oksana_shik/models/category_model.dart';
@@ -54,6 +55,7 @@ class FirestoreService {
     });
   }
 
+// Обновление данных пользователя по UID
   static Future<void> updateUser({
     required String uid,
     required String fullName,
@@ -192,5 +194,38 @@ class FirestoreService {
   // Получение всех услуг (для админки или отладки)
   static Stream<QuerySnapshot> getAllServices() {
     return _firestore.collection('services').snapshots();
+  }
+
+  ////////////////////////////////////////////////// Записи
+  // Создание записи о записи
+  static Future<void> createAppointment({
+    required String appointmentId,
+    required String userId,
+    required String userName,
+    required String serviceId,
+    required Map<String, String> serviceName,
+    required DateTime date,
+    required DateTime startTime,
+    required DateTime endTime,
+    required String status,
+  }) async {
+    try {
+      await _firestore.collection('appointments').doc(appointmentId).set({
+        'appointmentId': appointmentId,
+        'userId': userId,
+        'userName': userName,
+        'serviceId': serviceId,
+        'serviceName': serviceName,
+        'date': Timestamp.fromDate(date),
+        'startTime': Timestamp.fromDate(startTime),
+        'endTime': Timestamp.fromDate(endTime),
+        'status': status,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      print('Запись успешно создана!');
+    } catch (e) {
+      print('Ошибка при создании записи: $e');
+      rethrow;
+    }
   }
 }

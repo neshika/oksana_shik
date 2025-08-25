@@ -15,44 +15,6 @@ class RegisterScreen extends StatelessWidget {
     final TextEditingController confirmPasswordController =
         TextEditingController();
 
-    // void handleRegister() {
-    //   // Проверяем, что все поля заполнены
-    //   if (nameController.text.isEmpty ||
-    //       emailController.text.isEmpty ||
-    //       passwordController.text.isEmpty ||
-    //       confirmPasswordController.text.isEmpty) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(content: Text('Заполните все поля')),
-    //     );
-    //     return;
-    //   }
-
-    //   // Проверяем совпадение паролей
-    //   if (passwordController.text != confirmPasswordController.text) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(content: Text('Пароли не совпадают')),
-    //     );
-    //     return;
-    //   }
-
-    //   // Проверяем длину пароля
-    //   if (passwordController.text.length < 6) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(
-    //           content: Text('Пароль должен быть не менее 6 символов')),
-    //     );
-    //     return;
-    //   }
-
-    //   // Успешная регистрация (фейковая)
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Регистрация успешна!')),
-    //   );
-
-    //   // Возвращаемся на экран входа
-    //   Navigator.pop(context);
-    // }
-
     Future<void> signUp() async {
       try {
         // Проверяем, что все поля заполнены

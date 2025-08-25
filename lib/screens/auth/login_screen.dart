@@ -21,12 +21,12 @@ class LoginScreen extends StatelessWidget {
           return;
         }
 
-        // Пытаемся войти через Firebase Auth
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
+        // // Пытаемся войти через Firebase Auth
+        // UserCredential userCredential =
+        //     await FirebaseAuth.instance.signInWithEmailAndPassword(
+        //   email: emailController.text,
+        //   password: passwordController.text,
+        // );
 
         // Успешный вход
         Navigator.pushReplacementNamed(context, '/home');
