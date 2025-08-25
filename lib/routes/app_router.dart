@@ -5,6 +5,7 @@ import 'package:oksana_shik/screens/auth/register_screen.dart';
 import 'package:oksana_shik/screens/auth/test_screen.dart';
 import 'package:oksana_shik/screens/booking/booking_screen.dart';
 import 'package:oksana_shik/screens/home/home_screen.dart';
+import 'package:oksana_shik/screens/profile/appointments_history_screen.dart';
 import 'package:oksana_shik/screens/profile/profile_screen.dart';
 import 'package:oksana_shik/screens/splash/splash_screen.dart';
 
@@ -25,6 +26,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case '/test':
         return MaterialPageRoute(builder: (_) => const TestScreen());
+      case '/appointments_history':
+        return MaterialPageRoute(
+            builder: (context) => const AppointmentsHistoryScreen());
+
       default:
         return MaterialPageRoute(
           builder: (_) =>

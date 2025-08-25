@@ -228,6 +228,17 @@ class FirestoreService {
     }
   }
 
+// Метод для получения всех записей (без фильтрации)
+  static Stream<List<Appointment>> getAllAppointmentsStream() {
+    return FirebaseFirestore.instance
+        .collection('appointments')
+        .orderBy('date', descending: true) // Сортируем по дате (новые сверху)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              return Appointment.fromJson(doc.data()..['id'] = doc.id);
+            }).toList());
+  }
+
 // Метод для получения записей пользователя по UID
   static Stream<List<Appointment>> getUserAppointmentsStream(String userId) {
     return FirebaseFirestore.instance

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 
 class SettingsWidget extends StatelessWidget {
   final VoidCallback onLogoutPressed; // Функция для обработки выхода
+  final VoidCallback
+      onViewAppointmentsPressed; // Функция для перехода к истории записей
 
   const SettingsWidget({
     super.key,
     required this.onLogoutPressed,
+    required this.onViewAppointmentsPressed,
   });
 
   @override
@@ -46,12 +49,12 @@ class SettingsWidget extends StatelessWidget {
               ),
               const Divider(),
               ListTile(
-                leading: const Icon(Icons.help_outline),
-                title: const Text('Помощь'),
+                leading:
+                    const Icon(Icons.history), // Изменили иконку на историю
+                title: const Text(
+                    'История записей'), // Изменили текст на "История записей"
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  // Открыть помощь
-                },
+                onTap: onViewAppointmentsPressed, // Переход к истории записей
               ),
               const Divider(),
               ListTile(

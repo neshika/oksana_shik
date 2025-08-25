@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // Импортируем только виджет профиля
 import 'components/user_profile_widget.dart';
 import 'components/settings_widget.dart';
+import 'appointments_history_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -49,6 +50,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isEditing = true;
       });
     }
+  }
+
+  void _navigateToAppointments() {
+    // Здесь будет логика перехода к экрану истории записей
+
+    Navigator.pushNamed(context, '/appointments_history');
   }
 
   // --- Функция для сохранения изменений ---
@@ -138,10 +145,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 20),
 
                         // --- Использование нового виджета настроек ---
+                        // В profile_screen.dart, в вызове SettingsWidget:
                         SettingsWidget(
-                          onLogoutPressed:
-                              _handleLogoutPressed, // <--- Передаем функцию
-                        ),
+                          onLogoutPressed: _handleLogoutPressed,
+                          onViewAppointmentsPressed:
+                              _navigateToAppointments, // Добавьте эту функцию
+                        )
                       ],
                     ),
                   );
