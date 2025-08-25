@@ -226,4 +226,57 @@ class FirestoreService {
       rethrow;
     }
   }
+
+////////////////////////////////////////////////// Расписание
+// Создание расписания
+  static Future<void> createSchedule({
+    required DateTime date,
+    required Map<String, String> workingHours,
+    required bool isDayOff,
+    required Map<String, bool> availableSlots,
+  }) async {
+    try {
+      // Формируем уникальный ID для документа (дата в формате YYYY-MM-DD)
+      String dateId =
+          '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+      await _firestore.collection('schedule').doc(dateId).set({
+        'date': Timestamp.fromDate(date),
+        'workingHours': workingHours,
+        'isDayOff': isDayOff,
+        'availableSlots': availableSlots,
+      });
+      print('Расписание успешно создано!');
+    } catch (e) {
+      print('Ошибка при создании расписания: $e');
+      rethrow;
+    }
+  }
+
+// Получение расписания на определенную дату
+  static Future<Schedule?> getScheduleByDate(DateTime date) async {
+    try {
+      String dateId =
+          '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+      DocumentSnapshot doc =
+          await _firestore.collection('schedule').doc(dateId).get();
+      if (doc.exists) {
+        return Schedule.fromJson(doc.data() as Map<String, dynamic>);
+      }
+      return null;
+    } catch (e) {
+      print('Ошибка при получении расписания: $e');
+      return null;
+    }
+  }
+
+// Получение расписания на несколько дней
+  static Stream<QuerySnapshot> getScheduleRange(
+      DateTime startDate, DateTime endDate) {
+    return _firestore
+        .collection('schedule')
+        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+        .where('date', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
+        .snapshots();
+  }
 }

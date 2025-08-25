@@ -78,6 +78,129 @@ class TestScreen extends StatelessWidget {
     }
   }
 
+// Функция для создания коллекции записей
+  void createAppointmentsCollection(BuildContext context) async {
+    try {
+      // Сначала проверим, что пользователь и услуга существуют
+      // Создаем записи
+      await FirestoreService.createAppointment(
+        appointmentId: 'apt_001',
+        userId: 'test_user_001', // Убедись, что такой пользователь существует
+        userName: 'Тестовый Пользователь',
+        serviceId: 'svc_w_001', // Убедись, что такая услуга существует
+        serviceName: {
+          'ru': 'Стрижка женская короткий',
+          'en': 'Women\'s Short Haircut'
+        },
+        date: DateTime(2025, 8, 15),
+        startTime: DateTime(2025, 8, 15, 10, 0),
+        endTime: DateTime(2025, 8, 15, 11, 0),
+        status: 'confirmed',
+      );
+
+      // Создаем еще одну запись
+      await FirestoreService.createAppointment(
+        appointmentId: 'apt_002',
+        userId: 'test_user_001',
+        userName: 'Тестовый Пользователь',
+        serviceId: 'svc_m_001',
+        serviceName: {
+          'ru': 'Стрижка мужская короткий',
+          'en': 'Men\'s Short Haircut'
+        },
+        date: DateTime(2025, 8, 20),
+        startTime: DateTime(2025, 8, 20, 14, 30),
+        endTime: DateTime(2025, 8, 20, 15, 30),
+        status: 'confirmed',
+      );
+
+      // Показываем сообщение об успешном создании
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Коллекция appointments создана!')),
+      );
+    } catch (e) {
+      // Показываем сообщение об ошибке
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка: $e')),
+      );
+    }
+  }
+
+// Функция для создания коллекции Schedule
+  void createScheduleCollection(BuildContext context) async {
+    try {
+      // Создаем расписание на несколько дней
+      await FirestoreService.createSchedule(
+          date: DateTime(2025, 8, 15), // Сегодня
+          workingHours: {'start': '09:00', 'end': '19:00'},
+          isDayOff: false,
+          availableSlots: {
+            '09:00': true,
+            '09:30': true,
+            '10:00': true,
+            '10:30': false,
+            '11:00': true,
+            '11:30': true,
+            '12:00': true,
+            '12:30': false,
+            '13:00': true,
+            '13:30': true,
+            '14:00': true,
+            '14:30': true,
+            '15:00': true,
+            '15:30': true,
+            '16:00': true,
+            '16:30': true,
+            '17:00': true,
+            '17:30': true,
+            '18:00': true,
+            '18:30': true
+          });
+
+      await FirestoreService.createSchedule(
+          date: DateTime(2025, 8, 16), // Завтра
+          workingHours: {'start': '09:00', 'end': '19:00'},
+          isDayOff: false,
+          availableSlots: {
+            '09:00': true,
+            '09:30': true,
+            '10:00': true,
+            '10:30': true,
+            '11:00': true,
+            '11:30': true,
+            '12:00': true,
+            '12:30': true,
+            '13:00': true,
+            '13:30': true,
+            '14:00': true,
+            '14:30': true,
+            '15:00': true,
+            '15:30': true,
+            '16:00': true,
+            '16:30': true,
+            '17:00': true,
+            '17:30': true,
+            '18:00': true,
+            '18:30': true
+          });
+
+      // Создаем выходной день
+      await FirestoreService.createSchedule(
+          date: DateTime(2025, 8, 23), // Выходной
+          workingHours: {'start': '00:00', 'end': '00:00'},
+          isDayOff: true,
+          availableSlots: {});
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Коллекция schedule создана!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка: $e')),
+      );
+    }
+  }
+
 //создание данных для таблиц
   void createTestData(BuildContext context) async {
     try {
@@ -362,54 +485,6 @@ class TestScreen extends StatelessWidget {
     }
   }
 
-// Функция для создания коллекции записей
-  void createAppointmentsCollection(BuildContext context) async {
-    try {
-      // Сначала проверим, что пользователь и услуга существуют
-      // Создаем записи
-      await FirestoreService.createAppointment(
-        appointmentId: 'apt_001',
-        userId: 'test_user_001', // Убедись, что такой пользователь существует
-        userName: 'Тестовый Пользователь',
-        serviceId: 'svc_w_001', // Убедись, что такая услуга существует
-        serviceName: {
-          'ru': 'Стрижка женская короткий',
-          'en': 'Women\'s Short Haircut'
-        },
-        date: DateTime(2025, 8, 15),
-        startTime: DateTime(2025, 8, 15, 10, 0),
-        endTime: DateTime(2025, 8, 15, 11, 0),
-        status: 'confirmed',
-      );
-
-      // Создаем еще одну запись
-      await FirestoreService.createAppointment(
-        appointmentId: 'apt_002',
-        userId: 'test_user_001',
-        userName: 'Тестовый Пользователь',
-        serviceId: 'svc_m_001',
-        serviceName: {
-          'ru': 'Стрижка мужская короткий',
-          'en': 'Men\'s Short Haircut'
-        },
-        date: DateTime(2025, 8, 20),
-        startTime: DateTime(2025, 8, 20, 14, 30),
-        endTime: DateTime(2025, 8, 20, 15, 30),
-        status: 'confirmed',
-      );
-
-      // Показываем сообщение об успешном создании
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Коллекция appointments создана!')),
-      );
-    } catch (e) {
-      // Показываем сообщение об ошибке
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка: $e')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -431,6 +506,7 @@ class TestScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              // кнопки коллекций
               const SizedBox(height: 10),
               const Text(
                 'Коллекции',
@@ -493,7 +569,21 @@ class TestScreen extends StatelessWidget {
                   child: const Text('Создать коллекцию appointments'),
                 ),
               ),
-
+              const SizedBox(height: 10),
+              // Кнопка для создания коллекции schedule
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => createScheduleCollection(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown, // Коричневый цвет
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Создать коллекцию schedule'),
+                ),
+              ),
+//кнопки данных
               const SizedBox(height: 50),
               const Text(
                 'Данные',
