@@ -16,10 +16,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // Переменная для отслеживания режима редактирования
   bool _isEditing = false;
 
-  // Переменные для хранения отредактированных значений
-  late String _editedFullName;
-  late String _editedPhoneNumber;
-
   // Переменная для хранения оригинальных данных пользователя
   user_model.User? _userData;
 
@@ -81,11 +77,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   // Инициализируем переменные редактирования при первом получении данных
                   if (!_isEditing) {
-                    _editedFullName = _userData!.fullName;
-                    _editedPhoneNumber = _userData!.phoneNumber;
                     // Обновляем контроллеры при получении новых данных
-                    _fullNameController.text = _editedFullName;
-                    _phoneNumberController.text = _editedPhoneNumber;
+                    _fullNameController.text = _userData!.fullName;
+                    _phoneNumberController.text = _userData!.phoneNumber;
                   }
 
                   // Пример истории записей (в реальном приложении будут из Firebase)
@@ -142,11 +136,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     _isEditing
                                         ? TextField(
                                             controller: _fullNameController,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _editedFullName = value;
-                                              });
-                                            },
                                             decoration: const InputDecoration(
                                               border: OutlineInputBorder(),
                                               labelText: 'ФИО',
@@ -174,11 +163,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ? TextField(
                                             controller: _phoneNumberController,
                                             keyboardType: TextInputType.phone,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _editedPhoneNumber = value;
-                                              });
-                                            },
                                             decoration: const InputDecoration(
                                               border: OutlineInputBorder(),
                                               labelText: 'Телефон',
@@ -385,8 +369,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Обновляем данные пользователя в Firestore
       await FirestoreService.updateUser(
         uid: _userData!.uid,
-        fullName: _editedFullName,
-        phoneNumber: _editedPhoneNumber,
+        fullName: _fullNameController.text,
+        phoneNumber: _phoneNumberController.text,
         // email не изменяем, так как по условию задачи не меняем
       );
 
