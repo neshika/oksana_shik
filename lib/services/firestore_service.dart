@@ -137,7 +137,6 @@ class FirestoreService {
     required int duration,
     required String category,
     required bool isActive,
-    String? imageUrl,
   }) async {
     try {
       await _firestore.collection('services').doc(serviceId).set({
@@ -148,7 +147,6 @@ class FirestoreService {
         'duration': duration,
         'category': category,
         'isActive': isActive,
-        'imageUrl': imageUrl,
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       });
