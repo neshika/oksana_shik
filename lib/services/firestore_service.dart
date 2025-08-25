@@ -135,7 +135,6 @@ class FirestoreService {
     required int duration,
     required String category,
     required bool isActive,
-    String? imageUrl,
   }) async {
     try {
       await _firestore.collection('services').doc(serviceId).set({
@@ -146,7 +145,6 @@ class FirestoreService {
         'duration': duration,
         'category': category,
         'isActive': isActive,
-        'imageUrl': imageUrl,
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       });
@@ -192,5 +190,38 @@ class FirestoreService {
   // Получение всех услуг (для админки или отладки)
   static Stream<QuerySnapshot> getAllServices() {
     return _firestore.collection('services').snapshots();
+  }
+
+  ////////////////////////////////////////////////// Записи
+  // Создание записи о записи
+  static Future<void> createAppointment({
+    required String appointmentId,
+    required String userId,
+    required String userName,
+    required String serviceId,
+    required Map<String, String> serviceName,
+    required DateTime date,
+    required DateTime startTime,
+    required DateTime endTime,
+    required String status,
+  }) async {
+    try {
+      await _firestore.collection('appointments').doc(appointmentId).set({
+        'appointmentId': appointmentId,
+        'userId': userId,
+        'userName': userName,
+        'serviceId': serviceId,
+        'serviceName': serviceName,
+        'date': Timestamp.fromDate(date),
+        'startTime': Timestamp.fromDate(startTime),
+        'endTime': Timestamp.fromDate(endTime),
+        'status': status,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      print('Запись успешно создана!');
+    } catch (e) {
+      print('Ошибка при создании записи: $e');
+      rethrow;
+    }
   }
 }
