@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   // Цвета (можно уточнить у заказчика позже)
-  static const Color primaryColor = Color(0xFF8A2BE2); // Фиолетовый (пример)
+  static const Color primaryColor = Color(0xFF8A2BE2); // Фиолетовый
   static const Color accentColor = Color(0xFFFFD700); // Золотой
   static const Color backgroundColor = Colors.white;
   static const Color textColor = Color(0xFF333333);
+  static const Color subColorGrey = Color.fromRGBO(158, 158, 158, 1);
+  static const Color subColorGreen = Color.fromRGBO(76, 175, 80, 1);
+  static const Color subColorPurple = Color.fromRGBO(156, 39, 176, 1);
 
   // Темы
   static final ThemeData light = ThemeData(
