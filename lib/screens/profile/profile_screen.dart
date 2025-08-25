@@ -1,13 +1,12 @@
-// lib/screens/profile/profile_screen.dart (частично обновленный)
+// lib/screens/profile/profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
 import 'package:oksana_shik/services/firestore_service.dart';
 import 'package:oksana_shik/models/user_model.dart' as user_model;
 import 'package:firebase_auth/firebase_auth.dart';
 
-// Импортируйте новые виджеты
+// Импортируем только виджет профиля
 import 'components/user_profile_widget.dart';
-import 'components/appointments_list_widget.dart';
 import 'components/settings_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -19,11 +18,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   // Переменная для отслеживания режима редактирования
   bool _isEditing = false;
-
   // Переменная для хранения оригинальных данных пользователя
   user_model.User? _userData;
-
-  // Контроллеры для текстовых полей (решают проблему с клавиатурой)
+  // Контроллеры для текстовых полей
   late TextEditingController _fullNameController;
   late TextEditingController _phoneNumberController;
 
@@ -124,31 +121,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _phoneNumberController.text = _userData!.phoneNumber;
                   }
 
-                  // --- Создание списка записей ---
-                  final List<Map<String, dynamic>> appointments = [
-                    {
-                      'id': '1',
-                      'serviceName': 'Стрижка',
-                      'date': '15.08.2025',
-                      'time': '10:00',
-                      'status': 'confirmed',
-                    },
-                    {
-                      'id': '2',
-                      'serviceName': 'Окрашивание',
-                      'date': '20.08.2025',
-                      'time': '14:30',
-                      'status': 'confirmed',
-                    },
-                    {
-                      'id': '3',
-                      'serviceName': 'Укладка',
-                      'date': '25.08.2025',
-                      'time': '11:00',
-                      'status': 'completed',
-                    },
-                  ];
-
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -162,12 +134,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           phoneNumberController: _phoneNumberController,
                           onEditPressed:
                               _handleEditPressed, // <--- Передаем функцию
-                        ),
-                        const SizedBox(height: 20),
-
-                        // --- Использование нового виджета списка записей ---
-                        AppointmentsListWidget(
-                          appointments: appointments,
                         ),
                         const SizedBox(height: 20),
 

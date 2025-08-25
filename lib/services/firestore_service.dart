@@ -3,6 +3,7 @@ import 'package:oksana_shik/models/schedule_model.dart';
 import 'package:oksana_shik/models/user_model.dart' as user_model;
 import 'package:oksana_shik/models/service_model.dart';
 import 'package:oksana_shik/models/category_model.dart';
+import 'package:oksana_shik/models/appointment_model.dart';
 
 class FirestoreService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -225,6 +226,18 @@ class FirestoreService {
       print('Ошибка при создании записи: $e');
       rethrow;
     }
+  }
+
+// Метод для получения записей пользователя по UID
+  static Stream<List<Appointment>> getUserAppointmentsStream(String userId) {
+    return FirebaseFirestore.instance
+        .collection('appointments')
+        .where('userId', isEqualTo: userId)
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              return Appointment.fromJson(doc.data()..['id'] = doc.id);
+            }).toList());
   }
 
 ////////////////////////////////////////////////// Расписание
