@@ -1,9 +1,11 @@
-// lib/screens/auth/test_screen.dart
-import 'package:flutter/material.dart';
-import 'package:oksana_shik/utils/theme.dart';
-import 'package:oksana_shik/services/firestore_service.dart';
+// Импорты необходимых библиотек
+import 'package:flutter/material.dart'; // Основная библиотека Flutter
+import 'package:oksana_shik/utils/theme.dart'; // Тема приложения
+import 'package:oksana_shik/services/firestore_service.dart'; // Сервис для работы с Firestore
 
+// Тестовый экран для создания и заполнения данных в Firestore
 class TestScreen extends StatelessWidget {
+  // Конструктор с ключом
   const TestScreen({super.key});
 
   // Функция для создания коллекции users в Firestore
@@ -16,12 +18,12 @@ class TestScreen extends StatelessWidget {
         fullName: 'Тестовый Пользователь',
         phoneNumber: '+71234567890',
       );
-      // Показываем сообщение об успешном создании
+      // Показываем сообщение об успешном создании через SnackBar
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Коллекция users создана!')),
       );
     } catch (e) {
-      // Показываем сообщение об ошибке
+      // Показываем сообщение об ошибке в случае неудачи
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ошибка: $e')),
       );
@@ -78,11 +80,11 @@ class TestScreen extends StatelessWidget {
     }
   }
 
-// Функция для создания коллекции записей
+  // Функция для создания коллекции записей (appointments)
   void createAppointmentsCollection(BuildContext context) async {
     try {
       // Сначала проверим, что пользователь и услуга существуют
-      // Создаем записи
+      // Создаем первую запись
       await FirestoreService.createAppointment(
         appointmentId: 'apt_001',
         userId: 'test_user_001', // Убедись, что такой пользователь существует
@@ -98,7 +100,7 @@ class TestScreen extends StatelessWidget {
         status: 'confirmed',
       );
 
-      // Создаем еще одну запись
+      // Создаем вторую запись
       await FirestoreService.createAppointment(
         appointmentId: 'apt_002',
         userId: 'test_user_001',
@@ -126,10 +128,10 @@ class TestScreen extends StatelessWidget {
     }
   }
 
-// Функция для создания коллекции Schedule
+  // Функция для создания коллекции Schedule
   void createScheduleCollection(BuildContext context) async {
     try {
-      // Создаем расписание на несколько дней
+      // Создаем расписание на сегодняшний день
       await FirestoreService.createSchedule(
           date: DateTime(2025, 8, 15), // Сегодня
           workingHours: {'start': '09:00', 'end': '19:00'},
@@ -138,11 +140,11 @@ class TestScreen extends StatelessWidget {
             '09:00': true,
             '09:30': true,
             '10:00': true,
-            '10:30': false,
+            '10:30': false, // Занято
             '11:00': true,
             '11:30': true,
             '12:00': true,
-            '12:30': false,
+            '12:30': false, // Занято
             '13:00': true,
             '13:30': true,
             '14:00': true,
@@ -157,6 +159,7 @@ class TestScreen extends StatelessWidget {
             '18:30': true
           });
 
+      // Создаем расписание на завтра
       await FirestoreService.createSchedule(
           date: DateTime(2025, 8, 16), // Завтра
           workingHours: {'start': '09:00', 'end': '19:00'},
@@ -201,10 +204,10 @@ class TestScreen extends StatelessWidget {
     }
   }
 
-//создание данных для таблиц
+  // Создание тестовых данных для всех таблиц
   void createTestData(BuildContext context) async {
     try {
-      // Сначала создаем категории
+      // Создаем категории для различных услуг
       await FirestoreService.createCategory(
         categoryId: 'cat_female_001',
         name: {'ru': 'Женские стрижки', 'en': 'Women\'s Haircuts'},
@@ -229,7 +232,8 @@ class TestScreen extends StatelessWidget {
         order: 4,
         isActive: true,
       );
-      // Создаем множество услуг
+
+      // Создаем массив со всеми услугами
       List<Map<String, dynamic>> services = [
         // Женские стрижки
         {
@@ -384,7 +388,7 @@ class TestScreen extends StatelessWidget {
         },
       ];
 
-      // Создаем все услуги
+      // Создаем все услуги из списка
       for (var service in services) {
         await FirestoreService.createService(
           serviceId: service['serviceId'],
@@ -412,7 +416,7 @@ class TestScreen extends StatelessWidget {
         phoneNumber: '+79991234568',
       );
 
-      //создаем записи клиентов
+      // Создаем записи клиентов
       List<Map<String, dynamic>> appointments = [
         {
           'appointmentId': 'apt_001',
@@ -458,7 +462,7 @@ class TestScreen extends StatelessWidget {
         },
       ];
 
-      //Создаем все записи
+      // Создаем все записи из списка
       for (var appointment in appointments) {
         await FirestoreService.createAppointment(
           appointmentId: appointment['appointmentId'],
@@ -473,31 +477,34 @@ class TestScreen extends StatelessWidget {
         );
       }
 
-      // Показываем сообщение об успешном создании
+      // Показываем сообщение об успешном создании всех данных
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('База данных успешно наполнена!')),
       );
     } catch (e) {
-      // Показываем сообщение об ошибке
+      // Показываем сообщение об ошибке при создании данных
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ошибка при создании данных: $e')),
       );
     }
   }
 
+  // Основной метод построения интерфейса
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Тест базы данных'),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: AppTheme.backgroundColor,
+        title: const Text('Тест базы данных'), // Заголовок экрана
+        backgroundColor: AppTheme.primaryColor, // Цвет фона заголовка
+        foregroundColor: AppTheme.backgroundColor, // Цвет текста заголовка
       ),
       body: SingleChildScrollView(
+        // Позволяет прокручивать содержимое, если оно не помещается
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0), // Отступы вокруг содержимого
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Центрирование по вертикали
             children: [
               const Text(
                 'Здесь можно тестировать создание таблиц базы данных',
@@ -507,27 +514,30 @@ class TestScreen extends StatelessWidget {
                 ),
               ),
               // кнопки коллекций
-              const SizedBox(height: 10),
+              const SizedBox(height: 10), // Отступ между элементами
               const Text(
                 'Коллекции',
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.left, // Выравнивание текста по левому краю
+                style: TextStyle(fontSize: 16), // Размер шрифта
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Отступ между элементами
+
               // Кнопка для создания коллекции users
               SizedBox(
-                width: double.infinity,
-                height: 50,
+                width: double.infinity, // Ширина на весь экран
+                height: 50, // Высота кнопки
                 child: ElevatedButton(
-                  onPressed: () => createUsersCollection(context),
+                  onPressed: () =>
+                      createUsersCollection(context), // Действие при нажатии
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Синий цвет
-                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue, // Синий цвет фона
+                    foregroundColor: Colors.white, // Белый цвет текста
                   ),
-                  child: const Text('Создать коллекцию users'),
+                  child: const Text('Создать коллекцию users'), // Текст кнопки
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Отступ между элементами
+
               // Кнопка для создания коллекции categories
               SizedBox(
                 width: double.infinity,
@@ -535,13 +545,14 @@ class TestScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => createCategoriesCollection(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green, // Зеленый цвет
+                    backgroundColor: Colors.green, // Зеленый цвет фона
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Создать коллекцию categories'),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Отступ между элементами
+
               // Кнопка для создания коллекции services
               SizedBox(
                 width: double.infinity,
@@ -549,27 +560,29 @@ class TestScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => createServicesCollection(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange, // Оранжевый цвет
+                    backgroundColor: Colors.orange, // Оранжевый цвет фона
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Создать коллекцию services'),
                 ),
               ),
-              const SizedBox(height: 20),
-              //Кнопка для создания коллекции Appointment
+              const SizedBox(height: 20), // Отступ между элементами
+
+              // Кнопка для создания коллекции Appointment
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () => createAppointmentsCollection(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow[400], // Желтый цвет
+                    backgroundColor: Colors.yellow[400], // Желтый цвет фона
                     foregroundColor: Colors.grey,
                   ),
                   child: const Text('Создать коллекцию appointments'),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 10), // Отступ между элементами
+
               // Кнопка для создания коллекции schedule
               SizedBox(
                 width: double.infinity,
@@ -577,35 +590,38 @@ class TestScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => createScheduleCollection(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown, // Коричневый цвет
+                    backgroundColor: Colors.brown, // Коричневый цвет фона
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Создать коллекцию schedule'),
                 ),
               ),
-//кнопки данных
-              const SizedBox(height: 50),
+
+              // Кнопки данных
+              const SizedBox(height: 50), // Отступ перед следующим разделом
               const Text(
                 'Данные',
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 16),
               ),
-              const SizedBox(height: 20),
-              // Наполяем базу данных
+              const SizedBox(height: 20), // Отступ между элементами
+
+              // Наполняем базу данных тестовыми данными
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () => createTestData(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple, // Фиолетовый цвет
+                    backgroundColor: Colors.purple, // Фиолетовый цвет фона
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Наполнить базу данных'),
                 ),
               ),
-              const SizedBox(height: 20),
-              // Кнопка для перехода обратно
+              const SizedBox(height: 20), // Отступ между элементами
+
+              // Кнопка для перехода обратно к экрану входа
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -615,7 +631,7 @@ class TestScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey, // Серый цвет
+                    backgroundColor: Colors.grey, // Серый цвет фона
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Назад к входу'),

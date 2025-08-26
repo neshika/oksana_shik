@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:oksana_shik/services/firestore_service.dart'; // Добавляем импорт сервиса Firestore
 import 'package:oksana_shik/models/user_model.dart'
     as user_model; // Добавляем импорт модели пользователя
+import 'package:oksana_shik/screens/profile/user_appointments_screen.dart'; // Импорт экрана записей
+import 'package:oksana_shik/services/appointment_service.dart'; // Импорт сервиса записей
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -117,9 +119,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: Icon(Icons.history, color: Colors.purple),
-              title: Text('Мои записи'),
+              title: Text('Мои активные записи'),
               onTap: () {
                 // Навигация на историю записей
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserAppointmentsScreen(
+                      appointmentService:
+                          AppointmentService(), // Передаем сервис
+                      statusFilter:
+                          'confirmed', // Фильтр на подтвержденные записи
+                      title: 'Активные записи', // Кастомный заголовок
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(

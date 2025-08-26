@@ -4,11 +4,12 @@ import 'package:oksana_shik/utils/theme.dart';
 import 'package:oksana_shik/services/firestore_service.dart';
 import 'package:oksana_shik/models/user_model.dart' as user_model;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:oksana_shik/services/appointment_service.dart';
 
 // Импортируем только виджет профиля
 import 'components/user_profile_widget.dart';
 import 'components/settings_widget.dart';
-import 'appointments_history_screen.dart';
+import 'user_appointments_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -52,10 +53,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _navigateToAppointments() {
-    // Здесь будет логика перехода к экрану истории записей
+  // void _navigateToAppointments() {
+  //   // Здесь будет логика перехода к экрану истории записей
 
-    Navigator.pushNamed(context, '/appointments_history');
+  //   Navigator.pushNamed(context, '/appointments_history');
+  // }
+
+// --- Функция для перехода к экрану записей пользователя ---
+  void _navigateToAppointments() {
+    // Получаем ID текущего пользователя
+    final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
+    // Проверка: если пользователь не авторизован, показываем сообщение
+    // (Хотя экран профиля обычно доступен только авторизованным пользователям)
+    if (currentUserId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Пользователь не авторизован')),
+      );
+      return;
+    }
+
+    // Переход на экран UserAppointmentsScreen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserAppointmentsScreen(
+          // Используем get_it для получения сервиса
+          // Убедитесь, что get_it настроен в main.dart
+          // appointmentService: GetIt.instance<AppointmentService>(),
+
+          // Альтернатива: Создание нового экземпляра сервиса
+          // (менее предпочтительно для реального приложения)
+          appointmentService: AppointmentService(),
+        ),
+      ),
+    );
   }
 
   // --- Функция для сохранения изменений ---
@@ -100,10 +132,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text('Профиль'),
         backgroundColor: AppTheme.primaryColor,
         foregroundColor: AppTheme.backgroundColor,
-        leading: IconButton(
-          onPressed: () => Navigator.pushNamed(context, '/home'),
-          icon: Icon(Icons.arrow_back),
-        ),
+        // leading убран, так как AppBar автоматически добавит кнопку "Назад"
+        // при навигации через Navigator.push. Если нужна кастомная кнопка, оставьте.
+        // leading: IconButton(
+        //   onPressed: () => Navigator.pushNamed(context, '/home'),
+        //   icon: Icon(Icons.arrow_back),
+        // ),
       ),
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
