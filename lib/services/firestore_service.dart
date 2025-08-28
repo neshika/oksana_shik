@@ -113,15 +113,15 @@ class FirestoreService {
     }
   }
 
-  // Метод получения всех активных категорий (отсортированных по порядку)
-  static Stream<QuerySnapshot> getActiveCategories() {
-    // Возвращаем поток изменений активных категорий
-    return _firestore
-        .collection('categories')
-        .where('isActive', isEqualTo: true) // Фильтр по активности
-        .orderBy('order') // Сортировка по порядку
-        .snapshots(); // Поток изменений
-  }
+  // //Метод получения всех активных категорий (отсортированных по порядку) времено скрыто
+  // static Stream<QuerySnapshot> getActiveCategories() {
+  //   // Возвращаем поток изменений активных категорий
+  //   return _firestore
+  //       .collection('categories')
+  //       .where('isActive', isEqualTo: true) // Фильтр по активности
+  //       .orderBy('order') // Сортировка по порядку
+  //       .snapshots(); // Поток изменений
+  // }
 
   // Метод получения категории по ID
   static Future<Category?> getCategoryById(String categoryId) async {
@@ -308,6 +308,58 @@ class FirestoreService {
     }
   }
 
+  // Метод получения расписания на несколько дней
+  static Stream<QuerySnapshot> getScheduleRange(
+      DateTime startDate, DateTime endDate) {
+    // Возвращаем поток документов в диапазоне дат
+    return _firestore
+        .collection('schedule')
+        .where('date',
+            isGreaterThanOrEqualTo:
+                Timestamp.fromDate(startDate)) // Начальная дата
+        .where('date',
+            isLessThanOrEqualTo: Timestamp.fromDate(endDate)) // Конечная дата
+        .snapshots(); // Поток изменений
+  }
+
+/////////////////////////////////////////////////// booking
+// метод для получения списка активных категорий, отсортированных по полю order
+  static Future<List<Category>> getActiveCategories() async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('categories')
+          // .where('isActive', isEqualTo: true)
+          // .orderBy('order')
+          .get();
+
+      return snapshot.docs.map((doc) {
+        return Category.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+    } catch (e) {
+      print("Ошибка получения категорий: $e");
+      return []; // Или выбросить исключение
+    }
+  }
+
+// метод для получения списка активных услуг, отфильтрованных по categoryId
+  static Future<List<Service>> getActiveServicesByCategory(
+      String categoryId) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('services')
+          .where('isActive', isEqualTo: true)
+          .where('category', isEqualTo: categoryId)
+          .get();
+
+      return snapshot.docs.map((doc) {
+        return Service.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+    } catch (e) {
+      print("Ошибка получения услуг: $e");
+      return []; // Или выбросить исключение
+    }
+  }
+
   // Метод получения расписания на определенную дату
   static Future<Schedule?> getScheduleByDate(DateTime date) async {
     try {
@@ -327,19 +379,5 @@ class FirestoreService {
       print('Ошибка при получении расписания: $e'); // Вывод ошибки
       return null; // Возвращаем null в случае ошибки
     }
-  }
-
-  // Метод получения расписания на несколько дней
-  static Stream<QuerySnapshot> getScheduleRange(
-      DateTime startDate, DateTime endDate) {
-    // Возвращаем поток документов в диапазоне дат
-    return _firestore
-        .collection('schedule')
-        .where('date',
-            isGreaterThanOrEqualTo:
-                Timestamp.fromDate(startDate)) // Начальная дата
-        .where('date',
-            isLessThanOrEqualTo: Timestamp.fromDate(endDate)) // Конечная дата
-        .snapshots(); // Поток изменений
   }
 }

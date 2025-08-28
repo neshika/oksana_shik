@@ -133,7 +133,7 @@ class TestScreen extends StatelessWidget {
     try {
       // Создаем расписание на сегодняшний день
       await FirestoreService.createSchedule(
-          date: DateTime(2025, 8, 15), // Сегодня
+          date: DateTime(2025, 9, 1), // Сегодня
           workingHours: {'start': '09:00', 'end': '19:00'},
           isDayOff: false,
           availableSlots: {
@@ -161,7 +161,7 @@ class TestScreen extends StatelessWidget {
 
       // Создаем расписание на завтра
       await FirestoreService.createSchedule(
-          date: DateTime(2025, 8, 16), // Завтра
+          date: DateTime(2025, 9, 2), // Завтра
           workingHours: {'start': '09:00', 'end': '19:00'},
           isDayOff: false,
           availableSlots: {

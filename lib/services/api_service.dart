@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 const String baseUrl = 'https://openai.api.proxyapi.ru/v1/chat/completions';
-const String apiKey = 'sk-JuUam0b8FY1RgXjzzCYo6T7LewvAiZHn';
+const String apiKey = '22sk-JuUam0b8FY1RgXjzzCYo6T7LewvAiZHn';
 
 class DioClient {
   DioClient._();
