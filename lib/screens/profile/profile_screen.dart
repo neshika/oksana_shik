@@ -182,8 +182,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // В profile_screen.dart, в вызове SettingsWidget:
                         SettingsWidget(
                           onLogoutPressed: _handleLogoutPressed,
-                          onViewAppointmentsPressed:
-                              _navigateToAppointments, // Добавьте эту функцию
+                          //история записей
+                          onViewAppointmentsPressed: _navigateToAppointments,
                         )
                       ],
                     ),

@@ -296,7 +296,7 @@ class _BookingScreenState extends State<BookingScreen> {
         'date': Timestamp.fromDate(_selectedDate!),
         'startTime': Timestamp.fromDate(appointmentStartDate),
         'endTime': Timestamp.fromDate(appointmentEndDate),
-        'status': 'pending', // Начальный статус
+        'status': 'pending', // Начальный статус "ожидание"
         'createdAt': Timestamp.now(),
         // Можно добавить другие поля, например, информацию об услуге на момент записи
       };
