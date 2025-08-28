@@ -7,7 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart'; // Для получения 
 import 'package:oksana_shik/models/category_model.dart'; // Модель категории
 import 'package:oksana_shik/models/service_model.dart'; // Модель услуги
 import 'package:oksana_shik/models/schedule_model.dart'; // Модель расписания
-import 'package:oksana_shik/services/firestore_service.dart'; // Сервис для работы с Firestore
+import 'package:oksana_shik/services/firestore_service.dart';
+import 'package:oksana_shik/models/user_model.dart'
+    as user_model; // Используем алиас
 
 // Определяем виджет BookingScreen как StatefulWidget, потому что он будет иметь изменяющееся состояние
 // (например, выбранная категория, выбранная услуга, выбранная дата)
@@ -160,28 +162,52 @@ class _BookingScreenState extends State<BookingScreen> {
     });
   }
 
-  // Метод для обработки нажатия кнопки "Записаться"
+// Метод для обработки нажатия кнопки "Записаться"
   Future<void> _bookAppointment() async {
-    // Проверяем, что все необходимые данные выбраны
+    // 1. Проверка: Убедимся, что пользователь выбрал услугу, дату и время.
     if (_selectedServiceId == null ||
         _selectedDate == null ||
         _selectedTimeSlot == null) {
+      // Если что-то не выбрано, показываем сообщение и прерываем выполнение.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Пожалуйста, выберите услугу, дату и время.')),
       );
       return;
     }
 
-    // Получаем ID текущего пользователя
+    // 2. Получение данных пользователя: Нужно знать, кто записывается.
     final User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
+      // Если пользователь каким-то образом не авторизован, сообщаем об ошибке.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ошибка: пользователь не авторизован.')),
       );
       return;
     }
 
-    // Показываем индикатор прогресса
+    // 3. Получение данных выбранной услуги: Нам понадобится информация об услуге.
+    final Service? selectedService =
+        await FirestoreService.getServiceById(_selectedServiceId!);
+    if (selectedService == null) {
+      // Если услуга не найдена (например, была удалена), сообщаем об ошибке.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Выбранная услуга не найдена.')),
+      );
+      return;
+    }
+
+    // 4. Получение данных пользователя из Firestore: Нам нужно его имя.
+    final user_model.User? currentUserData =
+        await FirestoreService.getUserById(user.uid);
+    if (currentUserData == null) {
+      // Если профиль пользователя не найден, сообщаем об ошибке.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Информация о пользователе не найдена.')),
+      );
+      return;
+    }
+
+    // 5. Показываем индикатор прогресса, чтобы пользователь понимал, что идет процесс.
     showDialog(
       context: context,
       barrierDismissible: false, // Запрещаем закрытие диалога тапом вне его
@@ -199,15 +225,37 @@ class _BookingScreenState extends State<BookingScreen> {
     );
 
     try {
-      // 1. Повторно загружаем расписание для проверки актуальности данных
-      await _loadSchedule(_selectedDate!);
-      await Future.delayed(
-          Duration(milliseconds: 500)); // Небольшая задержка для имитации
+      // 6. Загружаем актуальное расписание для выбранной даты.
+      // Это важно, чтобы убедиться, что слот все еще доступен.
+      Schedule? currentSchedule =
+          await FirestoreService.getScheduleByDate(_selectedDate!);
 
-      // 2. Проверяем доступность слота
-      bool isSlotAvailable = _currentSchedule != null &&
-          !_currentSchedule!.isDayOff &&
-          _currentSchedule!.availableSlots[_selectedTimeSlot!] == true;
+      // 6.1. Проверка существования расписания
+      if (currentSchedule == null) {
+        Navigator.of(context).pop(); // Закрываем диалог прогресса
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Расписание на выбранную дату отсутствует. Пожалуйста, выберите другую дату.')),
+        );
+        return; // Прерываем процесс записи
+      }
+
+      // 6.2. Проверяем, является ли день выходным
+      if (currentSchedule.isDayOff) {
+        Navigator.of(context).pop(); // Закрываем диалог прогресса
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Выбранная дата является выходным днем. Пожалуйста, выберите другую дату.')),
+        );
+        return; // Прерываем процесс записи
+      }
+
+      // 6.3. Проверяем доступность конкретного временного слота
+      bool isSlotAvailable =
+          currentSchedule.availableSlots[_selectedTimeSlot!] ??
+              false; // Если ключа нет, считаем недоступным
 
       if (!isSlotAvailable) {
         Navigator.of(context).pop(); // Закрываем диалог прогресса
@@ -219,48 +267,80 @@ class _BookingScreenState extends State<BookingScreen> {
         return; // Прерываем процесс записи
       }
 
-      // 3. Создаем запись в Firestore
-      // Создаем Map для нового документа в коллекции 'appointments'
+      // 7. Подготовка данных для создания записи
+      // 7.1. Рассчитываем время начала и окончания на основе выбранного слота и продолжительности услуги
+      // Предполагается, что _selectedTimeSlot это строка в формате "HH:mm"
+      List<String> timeParts = _selectedTimeSlot!.split(':');
+      int startHour = int.parse(timeParts[0]);
+      int startMinute = int.parse(timeParts[1]);
+
+      DateTime appointmentStartDate = DateTime(
+        _selectedDate!.year,
+        _selectedDate!.month,
+        _selectedDate!.day,
+        startHour,
+        startMinute,
+      );
+      DateTime appointmentEndDate = appointmentStartDate.add(Duration(
+          minutes: selectedService.duration)); // Добавляем продолжительность
+
+      // 7.2. Создаем Map для нового документа в коллекции 'appointments'
+      // Используем структуру, совместимую с FirestoreService.createAppointment
       Map<String, dynamic> appointmentData = {
+        'appointmentId': '', // Будет установлен при добавлении в Firestore
         'userId': user.uid,
+        'userName': currentUserData.fullName ??
+            'Пользователь', // Имя из профиля пользователя
         'serviceId': _selectedServiceId,
+        'serviceName': selectedService.title, // Название услуги
         'date': Timestamp.fromDate(_selectedDate!),
-        'timeSlot': _selectedTimeSlot,
+        'startTime': Timestamp.fromDate(appointmentStartDate),
+        'endTime': Timestamp.fromDate(appointmentEndDate),
         'status': 'pending', // Начальный статус
         'createdAt': Timestamp.now(),
         // Можно добавить другие поля, например, информацию об услуге на момент записи
       };
 
-      DocumentReference newAppointmentRef = await FirebaseFirestore.instance
-          .collection('appointments')
-          .add(appointmentData);
+      // 8. Создаем запись в Firestore
+      // Используем add(), чтобы Firestore сам сгенерировал ID документа
+      DocumentReference newAppointmentRef =
+          await FirebaseFirestore.instance.collection('appointments').add(
+                appointmentData
+                  ..remove('appointmentId'), // Удаляем пустой appointmentId
+              );
+      // Обновляем appointmentData с реальным ID для последующего использования, если нужно
+      appointmentData['appointmentId'] = newAppointmentRef.id;
 
-      // 4. Обновляем расписание, делая слот недоступным
-      // Обновляем конкретное поле в документе расписания
+      // 9. Обновляем расписание, делая слот недоступным
+      // Важно: используем правильное имя коллекции 'schedule' и формат ID даты
+      String scheduleDocId =
+          '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}';
+
       await FirebaseFirestore.instance
-          .collection('schedules')
-          .doc(_currentSchedule!.date) // Используем дату как ID документа
+          .collection(
+              'schedule') // Используем 'schedule' (единственное число), как в FirestoreService
+          .doc(
+              scheduleDocId) // Используем строковый ID, сформированный по правилам FirestoreService
           .update({
         'availableSlots.${_selectedTimeSlot}': false,
       });
 
       Navigator.of(context).pop(); // Закрываем диалог прогресса
 
-      // Показываем сообщение об успехе и, возможно, переходим на другой экран
+      // 10. Показываем сообщение об успехе
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Запись успешно создана!')),
       );
       // Можно закрыть экран или перейти на экран подтверждения
       Navigator.of(context).pop(); // Закрываем экран записи
     } catch (e) {
-      Navigator.of(context).pop(); // Закрываем диалог прогресса
+      Navigator.of(context).pop(); // Закрываем диалог прогресса в случае ошибки
       print("Ошибка при создании записи: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ошибка при создании записи: ${e.toString()}')),
       );
     }
   }
-
   // --- Методы построения UI ---
 
   // Метод для построения виджета списка категорий

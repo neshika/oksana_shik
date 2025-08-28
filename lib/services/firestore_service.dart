@@ -328,7 +328,7 @@ class FirestoreService {
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('categories')
-          // .where('isActive', isEqualTo: true)
+          .where('isActive', isEqualTo: true)
           // .orderBy('order')
           .get();
 
