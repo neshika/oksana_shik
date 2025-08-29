@@ -24,13 +24,13 @@
 - Мультиязычная поддержка
 - Редактирование профиля
 
-### 📸 Скриншоты приложения
+###  Скриншоты приложения
 
 <div align="center">
 
 | Авторизация | Главный экран | Запись | Профиль |
 | :---: | :---: | :---: | :---: |
-| <img src="assets/screenshots/login.jpg" width="200"> | <img src="assets/screenshots/home.jpg" width="200"> | <img src="assets/screenshots/booking.jpg" width="200"> | <img src="assets/screenshots/profile.jpg" width="200"> |
+| <img src="assets/login.jpg" width="200"> | <img src="assets/home.jpg" width="200"> | <img src="assets/booking.jpg" width="200"> | <img src="assets/profile.jpg" width="200"> |
 </div>
 
 
@@ -64,8 +64,58 @@
 ### Поддерживаемые разрешения экранов
 От 375x812 px (iPhone 12/13/14 Mini) и выше
 
-## 🗃️ Структура базы данных
+## 🏗️ Архитектура проекта
 
+```
+lib/
+├── models/
+│   ├── appointment_model.dart
+│   ├── category_model.dart
+│   ├── schedule_model.dart
+│   ├── service_model.dart
+│   └── user_model.dart
+├── routes/
+│   └── app_router.dart
+├── screens/
+│   ├── auth/
+│   │   ├── login_screen.dart
+│   │   ├── register_screen.dart
+│   │   └── test_screen.dart
+│   ├── booking/
+│   │   └── booking_screen.dart
+│   ├── home/
+│   │   └── home_screen.dart
+│   ├── profile/
+│   │   ├── components/
+│   │   │   ├── appointments_list_widget.dart
+│   │   │   ├── settings_widget.dart
+│   │   │   └── user_profile_widget.dart
+│   │   ├── appointments_history_screen.dart
+│   │   ├── profile_screen.dart
+│   │   └── user_appointments_screen.dart
+│   ├── services/
+│   │   ├── service_filter.dart
+│   │   └── services_screen.dart
+│   └── splash/
+│       └── splash_screen.dart
+├── services/
+│   ├── api_service.dart
+│   ├── appointment_service.dart
+│   └── firestore_service.dart
+└── utils/
+    ├── constants.dart
+    └── theme.dart
+```
+###  Описание:
+- **`models/`** — модели данных (DTO).
+- **`routes/`** — маршрутизация приложения.
+- **`screens/`** — экраны, организованные по функциональным модулям.
+- **`components/`** — повторно используемые виджеты внутри модулей.
+- **`services/`** — бизнес-логика и API-взаимодействие.
+- **`utils/`** — глобальные константы, тема, утилиты.
+  
+
+## 🗃️ Структура базы данных
 ### Коллекция `users`
 ```javascript
 {
@@ -80,7 +130,7 @@
 ### Коллекция `services`
 ```javascript
 {
-  serviceId: string,    // auto-generated
+  serviceId: string,   
   title: {
     ru: string,
     en: string
@@ -112,7 +162,7 @@
   date: timestamp,
   startTime: timestamp,
   endTime: timestamp,
-  status: string,       // 'confirmed', 'completed', 'cancelled'
+  status: string,       // 'pending','confirmed', 'completed', 'cancelled'
   createdAt: timestamp,
   updatedAt: timestamp
 }
@@ -133,6 +183,7 @@
     // ...
   }
 }
+и т.п.
 ```
 
 ## 📱 Экраны приложения

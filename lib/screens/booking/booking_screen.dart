@@ -1,18 +1,14 @@
 // lib/screens/booking/booking_screen.dart
 
-// Импортируем необходимые библиотеки
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Для работы с Timestamp
-import 'package:firebase_auth/firebase_auth.dart'; // Для получения текущего пользователя
-import 'package:oksana_shik/models/category_model.dart'; // Модель категории
-import 'package:oksana_shik/models/service_model.dart'; // Модель услуги
-import 'package:oksana_shik/models/schedule_model.dart'; // Модель расписания
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:oksana_shik/models/category_model.dart';
+import 'package:oksana_shik/models/service_model.dart';
+import 'package:oksana_shik/models/schedule_model.dart';
 import 'package:oksana_shik/services/firestore_service.dart';
-import 'package:oksana_shik/models/user_model.dart'
-    as user_model; // Используем алиас
+import 'package:oksana_shik/models/user_model.dart' as user_model;
 
-// Определяем виджет BookingScreen как StatefulWidget, потому что он будет иметь изменяющееся состояние
-// (например, выбранная категория, выбранная услуга, выбранная дата)
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
 

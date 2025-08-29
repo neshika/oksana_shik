@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:oksana_shik/utils/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:oksana_shik/services/firestore_service.dart'; // Добавляем импорт сервиса Firestore
+import 'package:oksana_shik/services/firestore_service.dart';
 import 'package:oksana_shik/models/user_model.dart'
     as user_model; // Добавляем импорт модели пользователя
-import 'package:oksana_shik/screens/profile/user_appointments_screen.dart'; // Импорт экрана записей
-import 'package:oksana_shik/services/appointment_service.dart'; // Импорт сервиса записей
+import 'package:oksana_shik/screens/profile/user_appointments_screen.dart';
+import 'package:oksana_shik/services/appointment_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

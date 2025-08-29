@@ -53,12 +53,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // void _navigateToAppointments() {
-  //   // Здесь будет логика перехода к экрану истории записей
-
-  //   Navigator.pushNamed(context, '/appointments_history');
-  // }
-
 // --- Функция для перехода к экрану записей пользователя ---
   void _navigateToAppointments() {
     // Получаем ID текущего пользователя
@@ -78,12 +72,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => UserAppointmentsScreen(
-          // Используем get_it для получения сервиса
-          // Убедитесь, что get_it настроен в main.dart
-          // appointmentService: GetIt.instance<AppointmentService>(),
-
-          // Альтернатива: Создание нового экземпляра сервиса
-          // (менее предпочтительно для реального приложения)
           appointmentService: AppointmentService(),
         ),
       ),

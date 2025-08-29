@@ -179,7 +179,6 @@ class RegisterScreen extends StatelessWidget {
                   child: const Text('Зарегистрироваться'),
                 ),
               ),
-              // const SizedBox(height: 2),
               TextButton(
                 onPressed: () {
                   // Переход на экран политики

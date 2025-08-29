@@ -1,11 +1,9 @@
-// Импорты необходимых библиотек
 import 'package:flutter/material.dart'; // Основная библиотека Flutter
 import 'package:oksana_shik/utils/theme.dart'; // Тема приложения
 import 'package:oksana_shik/services/firestore_service.dart'; // Сервис для работы с Firestore
 
 // Тестовый экран для создания и заполнения данных в Firestore
 class TestScreen extends StatelessWidget {
-  // Конструктор с ключом
   const TestScreen({super.key});
 
   // Функция для создания коллекции users в Firestore

@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
           return;
         }
 
-        // Пытаемся войти через Firebase Auth
+        // Вход через Firebase Auth
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text,
@@ -98,7 +98,6 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  // onPressed: handleLogin,
                   onPressed: signIn,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryColor,
@@ -117,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                     foregroundColor: AppTheme.primaryColor),
                 child: const Text('Зарегистрироваться'),
               ),
-              // Новая кнопка для перехода на экран Test
+              // Кнопка для перехода на экран Test
               const SizedBox(height: 20),
               // SizedBox(
               //   width: double.infinity,
