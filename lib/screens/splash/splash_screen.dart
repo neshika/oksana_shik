@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     // Создаем контроллер анимации с продолжительностью 1 секунду
     _logoController = AnimationController(
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 2),
       vsync: this, // Необходимо для работы анимаций
     );
     // Создаем анимацию масштабирования логотипа
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Запускаем анимацию вперед
     _logoController.forward();
     // После 2 секунд переходим на экран входа
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       // Переход на экран логина с заменой текущего экрана
       Navigator.pushReplacementNamed((context), '/login');
     });
