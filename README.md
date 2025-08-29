@@ -30,7 +30,7 @@
 
 | Авторизация | Главный экран | Запись | Профиль |
 | :---: | :---: | :---: | :---: |
-| <img src="assets/screenshots/login.jpg" width="200"> | <img src="assets/screenshots/home.jpg" width="200"> | <img src="assets/screenshots/booking.jpg" width="200"> | <img src="assets/screenshots/profile.jpg" width="200"> |
+| <img src="assets/login.jpg" width="200"> | <img src="assets/home.jpg" width="200"> | <img src="assets/booking.jpg" width="200"> | <img src="assets/profile.jpg" width="200"> |
 </div>
 
 
