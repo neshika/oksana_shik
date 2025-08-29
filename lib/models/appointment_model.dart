@@ -63,7 +63,7 @@ class Appointment {
           : DateTime.now().add(Duration(
               hours: 1)), // Если endTime null, используем startTime + 1 час
       status:
-          json['status'] ?? 'unknown', // Если status null, используем 'unknown'
+          json['status'] ?? 'pending', // Если status null, используем 'unknown'
       createdAt: json['createdAt'] != null
           ? (json['createdAt'] as Timestamp).toDate()
           : DateTime.now(), // Если createdAt null, используем текущую дату

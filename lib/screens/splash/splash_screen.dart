@@ -131,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Text(
                 "Красота начинается здесь", // Текст подзаголовка
                 style: AppTheme.bodyText.copyWith(
-                  color: Colors.white70, // Полупрозрачный белый цвет
+                  color: Colors.white, // Полупрозрачный белый цвет
                 ),
               ),
             ),

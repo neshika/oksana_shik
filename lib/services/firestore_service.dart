@@ -113,16 +113,6 @@ class FirestoreService {
     }
   }
 
-  // //Метод получения всех активных категорий (отсортированных по порядку) времено скрыто
-  // static Stream<QuerySnapshot> getActiveCategories() {
-  //   // Возвращаем поток изменений активных категорий
-  //   return _firestore
-  //       .collection('categories')
-  //       .where('isActive', isEqualTo: true) // Фильтр по активности
-  //       .orderBy('order') // Сортировка по порядку
-  //       .snapshots(); // Поток изменений
-  // }
-
   // Метод получения категории по ID
   static Future<Category?> getCategoryById(String categoryId) async {
     try {
@@ -244,8 +234,7 @@ class FirestoreService {
         'startTime': Timestamp.fromDate(startTime),
         'endTime': Timestamp.fromDate(endTime),
         'status': status,
-        'createdAt': FieldValue
-            .serverTimestamp(), // ИСПРАВЛЕНО: Добавлено поле createdAt
+        'createdAt': FieldValue.serverTimestamp(),
       });
       print('Запись успешно создана!');
     } catch (e) {
@@ -254,18 +243,6 @@ class FirestoreService {
     }
   }
 
-  // // Метод получения всех записей (без фильтрации)
-  // static Stream<List<Appointment>> getAllAppointmentsStream() {
-  //   // Возвращаем поток записей, отсортированных по дате (новые сверху)
-  //   return FirebaseFirestore.instance
-  //       .collection('appointments')
-  //       .orderBy('date', descending: true) // Сортировка по дате
-  //       .snapshots() // Поток изменений
-  //       .map((snapshot) => snapshot.docs.map((doc) {
-  //             // Преобразуем каждый документ в объект Appointment
-  //             return Appointment.fromJson(doc.data()..['id'] = doc.id);
-  //           }).toList());
-  // }
   // Метод получения всех записей (без фильтрации)
   static Stream<List<Appointment>> getAllAppointmentsStream() {
     return FirebaseFirestore.instance
@@ -273,8 +250,7 @@ class FirestoreService {
         .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              // ИСПРАВЛЕНО: Создаем новую карту, избегая мутации оригинальных данных и ненужного каста
-              final data = doc.data(); // Убираем 'as Map<String, dynamic>'
+              final data = doc.data();
               // Создаем новый Map, включая ID документа
               final dataWithId = Map<String, dynamic>.from(data)
                 ..['id'] = doc.id;
@@ -283,19 +259,6 @@ class FirestoreService {
             }).toList());
   }
 
-  // // Метод получения записей пользователя по UID
-  // static Stream<List<Appointment>> getUserAppointmentsStream(String userId) {
-  //   // Возвращаем поток записей конкретного пользователя
-  //   return FirebaseFirestore.instance
-  //       .collection('appointments')
-  //       .where('userId', isEqualTo: userId) // Фильтр по UID пользователя
-  //       .orderBy('date', descending: true) // Сортировка по дате
-  //       .snapshots() // Поток изменений
-  //       .map((snapshot) => snapshot.docs.map((doc) {
-  //             // Преобразуем каждый документ в объект Appointment
-  //             return Appointment.fromJson(doc.data()..['id'] = doc.id);
-  //           }).toList());
-  // }
   // Метод получения записей пользователя по UID
   static Stream<List<Appointment>> getUserAppointmentsStream(String userId) {
     return FirebaseFirestore.instance
@@ -304,8 +267,7 @@ class FirestoreService {
         .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              // ИСПРАВЛЕНО: Создаем новую карту, избегая мутации оригинальных данных и ненужного каста
-              final data = doc.data(); // Убираем 'as Map<String, dynamic>'
+              final data = doc.data();
               // Создаем новый Map, включая ID документа
               final dataWithId = Map<String, dynamic>.from(data)
                 ..['id'] = doc.id;
@@ -356,7 +318,7 @@ class FirestoreService {
   }
 
 /////////////////////////////////////////////////// booking
-// метод для получения списка активных категорий, отсортированных по полю order
+// Метод для получения списка активных категорий, отсортированных по полю order
   static Future<List<Category>> getActiveCategories() async {
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -374,7 +336,7 @@ class FirestoreService {
     }
   }
 
-// метод для получения списка активных услуг, отфильтрованных по categoryId
+// Метод для получения списка активных услуг, отфильтрованных по categoryId
   static Future<List<Service>> getActiveServicesByCategory(
       String categoryId) async {
     try {
@@ -412,5 +374,177 @@ class FirestoreService {
       print('Ошибка при получении расписания: $e'); // Вывод ошибки
       return null; // Возвращаем null в случае ошибки
     }
+  }
+}
+
+/// Создает расписание на один конкретный день с жестко заданными параметрами.
+/// Используется внутри generateScheduleForPeriod.
+Future<void> _createScheduleForDay(DateTime date) async {
+  try {
+    // Определяем, выходной ли это день (суббота - 6, воскресенье - 7)
+    bool isDayOff =
+        (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday);
+
+    // Форматируем дату как строку для ID документа и поля date
+    String formattedDate =
+        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+    // Подготавливаем данные для записи
+    Map<String, dynamic> scheduleData;
+
+    if (isDayOff) {
+      // Если выходной, создаем соответствующую запись
+      scheduleData = {
+        'date': Timestamp.fromDate(
+            date), // Храним как строку, как в модели Schedule
+        'workingHours': {'start': '00:00', 'end': '00:00'},
+        'isDayOff': true,
+        'availableSlots': {},
+      };
+    } else {
+      // Если рабочий день, создаем с конкретными слотами
+      scheduleData = {
+        'date': Timestamp.fromDate(date),
+        'workingHours': {'start': '09:00', 'end': '19:00'},
+        'isDayOff': false,
+        'availableSlots': {
+          '09:00': true,
+          '09:30': true,
+          '10:00': true,
+          '10:30': false, // Занято
+          '11:00': true,
+          '11:30': true,
+          '12:00': true,
+          '12:30': false, // Занято
+          '13:00': true,
+          '13:30': true,
+          '14:00': true,
+          '14:30': true,
+          '15:00': true,
+          '15:30': true,
+          '16:00': true,
+          '16:30': true,
+          '17:00': true,
+          '17:30': true,
+          '18:00': true,
+          '18:30': true
+        },
+      };
+    }
+
+    // Записываем данные в Firestore, используя отформатированную дату как ID документа
+    await FirebaseFirestore.instance
+        .collection('schedule')
+        .doc(formattedDate)
+        .set(scheduleData);
+
+    print("Расписание для $formattedDate создано.");
+  } catch (e) {
+    print("Ошибка при создании расписания для ${date.toIso8601String()}: $e");
+    rethrow; // Пробрасываем ошибку для обработки выше
+  }
+}
+
+/// Генерирует расписание на период от startDate до endDate (включительно).
+
+Future<void> generateScheduleForPeriod({
+  required DateTime startDate,
+  required DateTime endDate,
+}) async {
+  try {
+    // Нормализуем даты до начала дня
+    DateTime start = DateTime(startDate.year, startDate.month, startDate.day);
+    DateTime end = DateTime(endDate.year, endDate.month, endDate.day);
+
+    if (start.isAfter(end)) {
+      throw Exception("Начальная дата должна быть меньше или равна конечной.");
+    }
+
+    // Используем WriteBatch для эффективности (до 500 операций)
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+    int batchCounter = 0;
+    int totalProcessed = 0;
+    CollectionReference schedulesRef =
+        FirebaseFirestore.instance.collection('schedule');
+
+    DateTime currentDate = start;
+
+    while (!currentDate.isAfter(end)) {
+      // Для генерации по периоду мы используем _createScheduleForDay для каждой даты
+      // Но так как batch.set требует Map, мы должны подготовить данные аналогично
+
+      // Определяем, выходной ли это день
+      bool isDayOff = (currentDate.weekday == DateTime.saturday ||
+          currentDate.weekday == DateTime.sunday);
+      String formattedDate =
+          '${currentDate.year}-${currentDate.month.toString().padLeft(2, '0')}-${currentDate.day.toString().padLeft(2, '0')}';
+
+      Map<String, dynamic> scheduleData;
+
+      if (isDayOff) {
+        scheduleData = {
+          'date': Timestamp.fromDate(currentDate),
+          'workingHours': {'start': '00:00', 'end': '00:00'},
+          'isDayOff': true,
+          'availableSlots': {},
+        };
+      } else {
+        scheduleData = {
+          'date': Timestamp.fromDate(currentDate),
+          'workingHours': {'start': '09:00', 'end': '19:00'},
+          'isDayOff': false,
+          'availableSlots': {
+            '09:00': true,
+            '09:30': true,
+            '10:00': true,
+            '10:30': false, // Занято
+            '11:00': true,
+            '11:30': true,
+            '12:00': true,
+            '12:30': false, // Занято
+            '13:00': true,
+            '13:30': true,
+            '14:00': true,
+            '14:30': true,
+            '15:00': true,
+            '15:30': true,
+            '16:00': true,
+            '16:30': true,
+            '17:00': true,
+            '17:30': true,
+            '18:00': true,
+            '18:30': true
+          },
+        };
+      }
+
+      DocumentReference docRef = schedulesRef.doc(formattedDate);
+      batch.set(docRef, scheduleData);
+
+      batchCounter++;
+      totalProcessed++;
+
+      // Отправляем батч каждые 500 операций
+      if (batchCounter == 500) {
+        print("Отправка батча ($totalProcessed записей)...");
+        await batch.commit();
+        batch = FirebaseFirestore.instance.batch(); // Создаем новый батч
+        batchCounter = 0;
+      }
+
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+
+    // Отправляем оставшиеся операции
+    if (batchCounter > 0) {
+      print("Отправка финального батча ($batchCounter записей)...");
+      await batch.commit();
+    }
+
+    print(
+        "Генерация расписания завершена. Период: с $start по $end. Всего дней: $totalProcessed");
+  } catch (e) {
+    print("Ошибка при генерации расписания на период: $e");
+    rethrow;
   }
 }

@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Главная /home'),
+        title: const Text('Главная'),
         backgroundColor: AppTheme.primaryColor,
         foregroundColor: AppTheme.backgroundColor,
         //кнопка назад

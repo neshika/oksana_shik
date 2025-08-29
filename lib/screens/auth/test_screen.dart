@@ -506,21 +506,13 @@ class TestScreen extends StatelessWidget {
             mainAxisAlignment:
                 MainAxisAlignment.center, // Центрирование по вертикали
             children: [
-              const Text(
-                'Здесь можно тестировать создание таблиц базы данных',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               // кнопки коллекций
-              const SizedBox(height: 10), // Отступ между элементами
               const Text(
                 'Коллекции',
                 textAlign: TextAlign.left, // Выравнивание текста по левому краю
                 style: TextStyle(fontSize: 16), // Размер шрифта
               ),
-              const SizedBox(height: 20), // Отступ между элементами
+              const SizedBox(height: 10), // Отступ между элементами
 
               // Кнопка для создания коллекции users
               SizedBox(
@@ -551,7 +543,7 @@ class TestScreen extends StatelessWidget {
                   child: const Text('Создать коллекцию categories'),
                 ),
               ),
-              const SizedBox(height: 20), // Отступ между элементами
+              const SizedBox(height: 10), // Отступ между элементами
 
               // Кнопка для создания коллекции services
               SizedBox(
@@ -566,7 +558,7 @@ class TestScreen extends StatelessWidget {
                   child: const Text('Создать коллекцию services'),
                 ),
               ),
-              const SizedBox(height: 20), // Отступ между элементами
+              const SizedBox(height: 10), // Отступ между элементами
 
               // Кнопка для создания коллекции Appointment
               SizedBox(
@@ -598,7 +590,7 @@ class TestScreen extends StatelessWidget {
               ),
 
               // Кнопки данных
-              const SizedBox(height: 50), // Отступ перед следующим разделом
+              const SizedBox(height: 20), // Отступ между элементами
               const Text(
                 'Данные',
                 textAlign: TextAlign.left,
@@ -619,7 +611,24 @@ class TestScreen extends StatelessWidget {
                   child: const Text('Наполнить базу данных'),
                 ),
               ),
-              const SizedBox(height: 20), // Отступ между элементами
+              const SizedBox(height: 10), // Отступ между элементами
+              // Кнопка для создания коллекции users
+              SizedBox(
+                width: double.infinity, // Ширина на весь экран
+                height: 50, // Высота кнопки
+                child: ElevatedButton(
+                  onPressed: () => generateScheduleForPeriod(
+                      startDate: DateTime(2025, 9, 3),
+                      endDate: DateTime(
+                          2025, 9, 30)), //Создает рассписание на сентябрь
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent, // Синий цвет фона
+                    foregroundColor: Colors.white, // Белый цвет текста
+                  ),
+                  child: const Text('Создать рассписание'), // Текст кнопки
+                ),
+              ),
+              const SizedBox(height: 10), // Отступ между элементами
 
               // Кнопка для перехода обратно к экрану входа
               SizedBox(

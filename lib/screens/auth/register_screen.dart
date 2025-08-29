@@ -95,7 +95,7 @@ class RegisterScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Регистрация /register'),
+        title: const Text('Регистрация'),
         backgroundColor: AppTheme.primaryColor,
         foregroundColor: AppTheme.backgroundColor,
         leading: IconButton(
@@ -178,6 +178,14 @@ class RegisterScreen extends StatelessWidget {
                       foregroundColor: AppTheme.backgroundColor),
                   child: const Text('Зарегистрироваться'),
                 ),
+              ),
+              // const SizedBox(height: 2),
+              TextButton(
+                onPressed: () {
+                  // Переход на экран политики
+                  // Navigator.pop(context);
+                },
+                child: const Text('Политика конфиденциальности'),
               ),
               const SizedBox(height: 20),
               TextButton(

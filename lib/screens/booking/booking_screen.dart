@@ -418,19 +418,32 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget _buildDateSelector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: [
-          Text('Дата: ', style: TextStyle(fontWeight: FontWeight.bold)),
-          Expanded(
-            // Expanded позволяет кнопке растянуться
-            child: ElevatedButton(
-              onPressed: () => _selectDate(context),
-              child: Text(
-                _selectedDate == null
-                    ? 'Выберите дату'
-                    : '${_selectedDate!.day}.${_selectedDate!.month}.${_selectedDate!.year}',
+          Row(
+            children: [
+              Text(
+                'Мастер принимает до 30 сентября 2025',
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
               ),
-            ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Дата: ', style: TextStyle(fontWeight: FontWeight.bold)),
+              Expanded(
+                // Expanded позволяет кнопке растянуться
+                child: ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: Text(
+                    _selectedDate == null
+                        ? 'Выберите дату'
+                        : '${_selectedDate!.day}.${_selectedDate!.month}.${_selectedDate!.year}',
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
