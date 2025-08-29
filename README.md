@@ -64,6 +64,47 @@
 ### Поддерживаемые разрешения экранов
 От 375x812 px (iPhone 12/13/14 Mini) и выше
 
+## Архитектура проекта
+lib/
+├── models/
+│   ├── appointment_model.dart
+│   ├── category_model.dart
+│   ├── schedule_model.dart
+│   ├── service_model.dart
+│   └── user_model.dart
+├── routes/
+│   └── app_router.dart
+├── screens/
+│   ├── auth/
+│   │   ├── login_screen.dart
+│   │   ├── register_screen.dart
+│   │   └── test_screen.dart
+│   ├── booking/
+│   │   └── booking_screen.dart
+│   ├── home/
+│   │   └── home_screen.dart
+│   ├── profile/
+│   │   ├── components/
+│   │   │   ├── appointments_list_widget.dart
+│   │   │   ├── settings_widget.dart
+│   │   │   └── user_profile_widget.dart
+│   │   ├── appointments_history_screen.dart
+│   │   ├── profile_screen.dart
+│   │   └── user_appointments_screen.dart
+│   ├── services/
+│   │   ├── service_filter.dart
+│   │   └── services_screen.dart
+│   └── splash/
+│       └── splash_screen.dart
+├── services/
+│   ├── api_service.dart
+│   ├── appointment_service.dart
+│   └── firestore_service.dart
+├── helpers.dart
+└── utils/
+    ├── constants.dart
+    └── theme.dart
+
 ## 🗃️ Структура базы данных
 
 ### Коллекция `users`
@@ -133,6 +174,7 @@
     // ...
   }
 }
+и т.п.
 ```
 
 ## 📱 Экраны приложения
