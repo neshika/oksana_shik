@@ -119,26 +119,26 @@ class LoginScreen extends StatelessWidget {
               ),
               // Новая кнопка для перехода на экран Test
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Переход на экран Test
-                    // Navigator.push(
-                    // context,
-                    // MaterialPageRoute(builder: (context) => const TestScreen()),
-                    //);
-                    Navigator.pushNamed(context, '/test');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.green, // Зеленый цвет для тестовой кнопки
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text('Перейти к тесту базы данных'),
-                ),
-              ),
+              // SizedBox(
+              //   width: double.infinity,
+              //   height: 50,
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // Переход на экран Test
+              //       // Navigator.push(
+              //       // context,
+              //       // MaterialPageRoute(builder: (context) => const TestScreen()),
+              //       //);
+              //       Navigator.pushNamed(context, '/test');
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor:
+              //           Colors.green, // Зеленый цвет для тестовой кнопки
+              //       foregroundColor: Colors.white,
+              //     ),
+              //     child: const Text('Перейти к тесту базы данных'),
+              //   ),
+              // ),
             ],
           ),
         ),
