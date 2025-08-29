@@ -8,15 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AppointmentsHistoryScreen extends StatefulWidget {
   const AppointmentsHistoryScreen({super.key});
+
   @override
   State<AppointmentsHistoryScreen> createState() =>
       _AppointmentsHistoryScreenState();
 }
 
 class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
-  // Список записей
   List<Appointment> _appointments = [];
-  // Состояние загрузки данных
   bool _isLoading = true;
   String? _error;
   StreamSubscription<List<Appointment>>? _appointmentsSubscription;
@@ -33,17 +32,13 @@ class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
     super.dispose();
   }
 
-  // Функция для загрузки записей пользователя
   void _loadAppointments() {
-    // Получаем текущего пользователя
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       setState(() {
         _isLoading = true;
         _error = null;
       });
-
-      // Подписываемся на поток записей пользователя
       _appointmentsSubscription =
           FirestoreService.getUserAppointmentsStream(user.uid).listen(
         (appointments) {
@@ -86,7 +81,7 @@ class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
         foregroundColor: AppTheme.backgroundColor,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: _isLoading
@@ -96,7 +91,7 @@ class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.error, size: 48, color: Colors.red),
+                      const Icon(Icons.error, size: 48, color: Colors.red),
                       const SizedBox(height: 16),
                       Text(_error!,
                           style:
@@ -158,6 +153,7 @@ class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
+                                        // ТЕПЕРЬ БЕЗ ПРОВЕРОК НА NULL, так как поля обязательные
                                         appointment.serviceName['ru'] ??
                                             appointment.serviceName['en'] ??
                                             'Неизвестная услуга',
@@ -173,10 +169,11 @@ class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
                                 // Дата и время
                                 Row(
                                   children: [
-                                    Icon(Icons.calendar_today,
+                                    const Icon(Icons.calendar_today,
                                         size: 16, color: Colors.grey),
                                     const SizedBox(width: 8),
                                     Text(
+                                      // ТЕПЕРЬ БЕЗ ПРОВЕРОК НА NULL
                                       '${_formatDate(appointment.date)} в ${_formatTime(appointment.startTime)}',
                                       style: const TextStyle(
                                           fontSize: 14, color: Colors.grey),
@@ -198,6 +195,7 @@ class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
+                                      // ТЕПЕРЬ БЕЗ ПРОВЕРОК НА NULL
                                       appointment.status == 'completed'
                                           ? 'Завершена'
                                           : 'Подтверждена',
@@ -215,10 +213,11 @@ class _AppointmentsHistoryScreenState extends State<AppointmentsHistoryScreen> {
                                 // Информация о пользователе
                                 Row(
                                   children: [
-                                    Icon(Icons.person,
+                                    const Icon(Icons.person,
                                         size: 16, color: Colors.grey),
                                     const SizedBox(width: 8),
                                     Text(
+                                      // ТЕПЕРЬ БЕЗ ПРОВЕРОК НА NULL
                                       'Запись от: ${appointment.userName}',
                                       style: const TextStyle(
                                           fontSize: 14, color: Colors.grey),

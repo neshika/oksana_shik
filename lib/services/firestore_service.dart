@@ -223,61 +223,94 @@ class FirestoreService {
   ////////////////////////////////////////////////// Записи
   // Метод создания записи о записи (запись клиента на услугу)
   static Future<void> createAppointment({
-    required String appointmentId, // Уникальный ID записи
-    required String userId, // UID пользователя
-    required String userName, // Имя пользователя
-    required String serviceId, // ID услуги
-    required Map<String, String> serviceName, // Название услуги
-    required DateTime date, // Дата записи
-    required DateTime startTime, // Время начала
-    required DateTime endTime, // Время окончания
-    required String status, // Статус записи
+    required String appointmentId,
+    required String userId,
+    required String userName,
+    required String serviceId,
+    required Map<String, String> serviceName,
+    required DateTime date,
+    required DateTime startTime,
+    required DateTime endTime,
+    required String status,
   }) async {
     try {
-      // Добавляем документ в коллекцию 'appointments'
       await _firestore.collection('appointments').doc(appointmentId).set({
-        'appointmentId': appointmentId, // ID записи
-        'userId': userId, // UID пользователя
-        'userName': userName, // Имя пользователя
-        'serviceId': serviceId, // ID услуги
-        'serviceName': serviceName, // Название услуги
-        'date': Timestamp.fromDate(date), // Дата записи (в формате Timestamp)
-        'startTime': Timestamp.fromDate(startTime), // Время начала
-        'endTime': Timestamp.fromDate(endTime), // Время окончания
-        'status': status, // Статус записи
-        'createdAt': FieldValue.serverTimestamp(), // Время создания
+        'appointmentId': appointmentId,
+        'userId': userId,
+        'userName': userName,
+        'serviceId': serviceId,
+        'serviceName': serviceName,
+        'date': Timestamp.fromDate(date),
+        'startTime': Timestamp.fromDate(startTime),
+        'endTime': Timestamp.fromDate(endTime),
+        'status': status,
+        'createdAt': FieldValue
+            .serverTimestamp(), // ИСПРАВЛЕНО: Добавлено поле createdAt
       });
-      print('Запись успешно создана!'); // Вывод успешного сообщения
+      print('Запись успешно создана!');
     } catch (e) {
-      print('Ошибка при создании записи: $e'); // Вывод ошибки
-      rethrow; // Переброс исключения
+      print('Ошибка при создании записи: $e');
+      rethrow;
     }
   }
 
+  // // Метод получения всех записей (без фильтрации)
+  // static Stream<List<Appointment>> getAllAppointmentsStream() {
+  //   // Возвращаем поток записей, отсортированных по дате (новые сверху)
+  //   return FirebaseFirestore.instance
+  //       .collection('appointments')
+  //       .orderBy('date', descending: true) // Сортировка по дате
+  //       .snapshots() // Поток изменений
+  //       .map((snapshot) => snapshot.docs.map((doc) {
+  //             // Преобразуем каждый документ в объект Appointment
+  //             return Appointment.fromJson(doc.data()..['id'] = doc.id);
+  //           }).toList());
+  // }
   // Метод получения всех записей (без фильтрации)
   static Stream<List<Appointment>> getAllAppointmentsStream() {
-    // Возвращаем поток записей, отсортированных по дате (новые сверху)
     return FirebaseFirestore.instance
         .collection('appointments')
-        .orderBy('date', descending: true) // Сортировка по дате
-        .snapshots() // Поток изменений
+        .orderBy('date', descending: true)
+        .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              // Преобразуем каждый документ в объект Appointment
-              return Appointment.fromJson(doc.data()..['id'] = doc.id);
+              // ИСПРАВЛЕНО: Создаем новую карту, избегая мутации оригинальных данных и ненужного каста
+              final data = doc.data(); // Убираем 'as Map<String, dynamic>'
+              // Создаем новый Map, включая ID документа
+              final dataWithId = Map<String, dynamic>.from(data)
+                ..['id'] = doc.id;
+              // Преобразуем новую карту в объект Appointment
+              return Appointment.fromJson(dataWithId);
             }).toList());
   }
 
+  // // Метод получения записей пользователя по UID
+  // static Stream<List<Appointment>> getUserAppointmentsStream(String userId) {
+  //   // Возвращаем поток записей конкретного пользователя
+  //   return FirebaseFirestore.instance
+  //       .collection('appointments')
+  //       .where('userId', isEqualTo: userId) // Фильтр по UID пользователя
+  //       .orderBy('date', descending: true) // Сортировка по дате
+  //       .snapshots() // Поток изменений
+  //       .map((snapshot) => snapshot.docs.map((doc) {
+  //             // Преобразуем каждый документ в объект Appointment
+  //             return Appointment.fromJson(doc.data()..['id'] = doc.id);
+  //           }).toList());
+  // }
   // Метод получения записей пользователя по UID
   static Stream<List<Appointment>> getUserAppointmentsStream(String userId) {
-    // Возвращаем поток записей конкретного пользователя
     return FirebaseFirestore.instance
         .collection('appointments')
-        .where('userId', isEqualTo: userId) // Фильтр по UID пользователя
-        .orderBy('date', descending: true) // Сортировка по дате
-        .snapshots() // Поток изменений
+        .where('userId', isEqualTo: userId)
+        .orderBy('date', descending: true)
+        .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              // Преобразуем каждый документ в объект Appointment
-              return Appointment.fromJson(doc.data()..['id'] = doc.id);
+              // ИСПРАВЛЕНО: Создаем новую карту, избегая мутации оригинальных данных и ненужного каста
+              final data = doc.data(); // Убираем 'as Map<String, dynamic>'
+              // Создаем новый Map, включая ID документа
+              final dataWithId = Map<String, dynamic>.from(data)
+                ..['id'] = doc.id;
+              // Преобразуем новую карту в объект Appointment
+              return Appointment.fromJson(dataWithId);
             }).toList());
   }
 

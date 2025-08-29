@@ -5,9 +5,9 @@ class AppointmentsListWidget extends StatelessWidget {
   final List<Map<String, dynamic>> appointments;
 
   const AppointmentsListWidget({
-    Key? key,
+    super.key,
     required this.appointments,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
